@@ -27,6 +27,7 @@ body{font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);background:#
 .hdr-brand{font-family:'DM Serif Display',serif;font-size:21px;letter-spacing:.5px;color:var(--white);}
 .hdr-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:1px;letter-spacing:.3px;}
 .hdr-count{margin-left:auto;font-size:11px;color:var(--gold2);background:rgba(184,147,74,.12);padding:4px 10px;border-radius:20px;border:1px solid rgba(184,147,74,.2);white-space:nowrap;}
+.lang-btn.on{background:var(--gold) !important;color:var(--white) !important;}
 .tabs{display:flex;border-top:1px solid rgba(255,255,255,.08);position:relative;z-index:1;}
 .tab{flex:1;padding:12px 4px 10px;border:none;background:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:rgba(255,255,255,.35);cursor:pointer;letter-spacing:.4px;border-bottom:2px solid transparent;transition:all .2s;text-transform:uppercase;}
 .tab.on{color:var(--gold2);border-bottom-color:var(--gold);}
@@ -97,6 +98,9 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .det-pill{font-size:10px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.65);}
 .det-pill-gold{background:rgba(184,147,74,.2);color:var(--gold2);}
 .frow{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--cream2);}
+.frow input[type=text]{transition:background .15s,border-color .15s;border-radius:4px;}
+.frow input[type=text]:hover{background:var(--cream);}
+.frow input[type=text]:focus{background:var(--white);border:1.5px solid var(--gold)!important;outline:none;padding:2px 6px!important;}
 .frow:last-child{border-bottom:none;}
 .fk{font-size:11px;color:var(--ink3);flex-shrink:0;padding-right:8px;}
 .fv{font-size:12px;font-weight:500;text-align:right;max-width:65%;word-break:break-word;}
@@ -167,16 +171,19 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         </svg>
       </div>
       <div style="flex:1;min-width:0">
-        <img src="" id="hdr-logo" style="height:18px;display:block;margin-bottom:2px">
-        <div class="hdr-sub" style="font-size:9px;letter-spacing:.8px;text-transform:uppercase;font-weight:600;white-space:nowrap">Bottle Registry &amp; Library · Registro y Biblioteca de Botellas</div>
+        <img src="" id="hdr-logo" style="height:23px;display:block;margin-bottom:2px">
+        <div class="hdr-sub" data-i18n="subtitle" style="font-size:9px;letter-spacing:.8px;text-transform:uppercase;font-weight:600;white-space:nowrap">Registro y Biblioteca de Botellas</div>
+      </div>
+      <div style="display:flex;gap:4px;margin-left:8px;flex-shrink:0">
+        <div class="lang-btn on" data-lang="es" onclick="setLang('es')" style="font-size:10px;font-weight:700;padding:3px 7px;border-radius:4px;cursor:pointer;background:rgba(255,255,255,.08);color:rgba(255,255,255,.4)">ES</div>
+        <div class="lang-btn" data-lang="en" onclick="setLang('en')" style="font-size:10px;font-weight:700;padding:3px 7px;border-radius:4px;cursor:pointer;background:rgba(255,255,255,.08);color:rgba(255,255,255,.4)">EN</div>
       </div>
       <div class="hdr-count" id="cnt">0 botellas</div>
     </div>
     <div class="tabs">
-      <button class="tab on" onclick="go('lib')">Biblioteca</button>
-      <button class="tab" onclick="go('reg')">Registrar</button>
-      <button class="tab" onclick="go('lbl')">Etiqueta</button>
-      <button class="tab" onclick="go('a4')">Tech Sheet</button>
+      <button class="tab on" onclick="go('lib')" data-i18n="tabBiblioteca">Biblioteca</button>
+      <button class="tab" onclick="go('reg')" data-i18n="tabRegistrar">Registrar</button>
+      <button class="tab" onclick="go('a4')" data-i18n="tabTechSheet">Tech Sheet</button>
     </div>
   </div>
 
@@ -187,15 +194,15 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
     <!-- BIBLIOTECA -->
     <div id="p-lib" class="pane on">
       <div class="filter-wrap">
-        <div class="filter-title">Filtrar biblioteca</div>
-        <input type="text" id="fs" placeholder="Buscar por marca, modelo, código..." oninput="renderLib()" style="margin-bottom:8px">
+        <div class="filter-title" data-i18n="filtrarBiblio">Filtrar biblioteca</div>
+        <input type="text" id="fs" data-i18n="buscarPlaceholder" placeholder="Buscar por marca, modelo, código..." oninput="renderLib()" style="margin-bottom:8px">
         <div class="g2" style="margin-bottom:8px">
-          <input type="text" id="fmarca" placeholder="Marca..." oninput="renderLib()">
-          <input type="text" id="fmod" placeholder="Modelo botella..." oninput="renderLib()">
-        <button type="button" class="btn-add" onclick="ONLINE?loadFromGoogle():toast('Configurá Google Script primero')" style="margin-top:8px;width:100%;justify-content:center;display:flex">🔄 Sincronizar con Google</button>
+          <input type="text" id="fmarca" data-i18n="marcaPlaceholder" placeholder="Marca..." oninput="renderLib()">
+          <input type="text" id="fmod" data-i18n="modeloPlaceholder" placeholder="Modelo botella..." oninput="renderLib()">
+        <button type="button" class="btn-add" onclick="ONLINE?loadFromGoogle():toast('Configurá Google Script primero')" style="margin-top:8px;width:100%;justify-content:center;display:flex"><span data-i18n="sincronizar">🔄 Sincronizar con Google</span></button>
         </div>
         <div class="g2" style="margin-bottom:8px">
-          <input type="text" id="fmk" placeholder="Fabricante..." oninput="renderLib()">
+          <input type="text" id="fmk" data-i18n="fabricantePlaceholder" placeholder="Fabricante..." oninput="renderLib()">
           <select id="floc" onchange="renderLib()">
             <option value="">Todos los lugares</option>
             <option value="ARG">Argentina</option>
@@ -203,11 +210,11 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
             <option value="BOTH">Ambos</option>
           </select>
         </div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">Estado de recepción</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px" data-i18n="estadoRecepcion">Estado de recepción</div>
         <div class="filter-pills">
-          <div class="fpill on" data-v="" onclick="selFpill(this)">Todas</div>
-          <div class="fpill fpill-recv" data-v="recv" onclick="selFpill(this)">✓ Recibidas</div>
-          <div class="fpill fpill-pend" data-v="pend" onclick="selFpill(this)">⏳ Pendientes</div>
+          <div class="fpill on" data-v="" onclick="selFpill(this)" data-i18n="todas">Todas</div>
+          <div class="fpill fpill-recv" data-v="recv" onclick="selFpill(this)" data-i18n="recibidas">✓ Recibidas</div>
+          <div class="fpill fpill-pend" data-v="pend" onclick="selFpill(this)" data-i18n="pendientes">⏳ Pendientes</div>
         </div>
       </div>
       <div id="lib"></div>
@@ -216,7 +223,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
     <!-- DETALLE -->
     <div id="p-det" class="pane">
       <div class="back-row">
-        <button class="back-btn" onclick="go('lib')">← Volver</button>
+        <button class="back-btn" onclick="go('lib')" data-i18n="volver">← Volver</button>
         <button class="btn btn-gold btn-sm" onclick="goA4()" style="margin-left:auto">Tech Sheet</button>
       </div>
       <div id="det"></div>
@@ -225,120 +232,127 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
     <!-- REGISTRO -->
     <div id="p-reg" class="pane">
 
-      <!-- 01 FOTOS Y PLANO -->
+      <!-- 01 MARCA Y PROYECTO -->
+      <div class="card card-gold">
+        <div class="ctitle"><span style="color:var(--gold)">01</span> <span data-i18n="marcaProyecto">Marca y proyecto</span></div>
+        <span class="flabel" data-i18n="marcaReq">Marca</span><span class="req">*</span>
+        <input type="text" id="r-marca" data-i18n="marcaPlaceholder2" placeholder="Ej: North of Scotland, Glenfiddich...">
+        <span class="flabel" data-i18n="proyectoCodigo">Proyecto / Código de diseño</span>
+        <input type="text" id="r-pro" data-i18n="proyectoPlaceholder" placeholder="Ej: IDA-CAT3018-40X65-AB">
+        <span class="flabel" data-i18n="moldeDisenoLabel">Número de molde de diseño</span>
+        <input type="text" id="r-molD" data-i18n="moldeDisenoPh" placeholder="Ej: M-2024-08">
+      </div>
+
+      <!-- 02 TIPO DE PRODUCTO -->
+      <div class="card card-gold">
+        <div class="ctitle"><span style="color:var(--gold)">02</span> <span data-i18n="s02">Tipo de producto</span></div>
+        <div style="font-size:11px;color:var(--ink3);margin-bottom:6px" data-i18n="articulosSeleccion">Seleccioná todos los que aplican para esta marca</div>
+        <div id="reg-art-list"></div>
+        <button type="button" class="btn-add" onclick="addRegArt()" data-i18n="agregarArticulo">+ Agregar artículo</button>
+      </div>
+
+      <!-- 03 DATOS BOTELLA -->
       <div class="card">
-        <div class="ctitle"><span style="color:var(--gold)">01</span> Fotos y plano técnico</div>
-        <span class="flabel">Foto botella entera</span>
+        <div class="ctitle"><span style="color:var(--gold)">03</span> <span data-i18n="datosBotella">Datos de la botella</span></div>
+        <span class="flabel" data-i18n="codigoRef">Código / Referencia</span><span class="req">*</span>
+        <input type="text" id="r-cod" data-i18n="codigoPh" placeholder="Ej: FT-SINGLE-70-75">
+        <span class="flabel" data-i18n="modeloLabel">Modelo</span><span class="req">*</span>
+        <input type="text" id="r-mod" data-i18n="modeloPh" placeholder="Ej: SINGLE, PRESTIGE, BELUGA...">
+        <span class="flabel" data-i18n="fabricanteVidrio">Fabricante de vidrio</span><span class="req">*</span>
+        <div class="chips" id="mak-chips" style="margin-bottom:6px">
+          <div class="chip" data-v="Saverglass" onclick="pickMak(this)">Saverglass</div>
+          <div class="chip" data-v="Estal" onclick="pickMak(this)">Estal</div>
+          <div class="chip" data-v="Stoelzle" onclick="pickMak(this)">Stoelzle</div>
+          <div class="chip" data-v="O-I" onclick="pickMak(this)">O-I</div>
+          <div class="chip" data-v="Berlin" onclick="pickMak(this)">Berlin</div>
+          <div class="chip" data-v="Verallia" onclick="pickMak(this)">Verallia</div>
+        </div>
+        <input type="text" id="r-mak" data-i18n="fabricantePh" placeholder="Escribí o elegí arriba">
+        <span class="flabel" data-i18n="numeroMolde">Número de molde</span>
+        <input type="text" id="r-mol" data-i18n="moldePh" placeholder="Ej: 3003">
+        <span class="flabel" data-i18n="numeroCuno">Número de cuño</span>
+        <input type="text" id="r-cuno" data-i18n="cunoPh" placeholder="Ej: A1, B2...">
+        <div class="g2">
+          <div><span class="flabel" data-i18n="capacidadLabel">Capacidad</span><input type="text" id="r-cap" data-i18n="capacidadPh" placeholder="Ej: 70cl"></div>
+          <div><span class="flabel" data-i18n="bagueLabel">Bague / Cierre</span><input type="text" id="r-fin" data-i18n="baguePh" placeholder="Ej: SB 27.8"></div>
+        </div>
+        <span class="flabel" data-i18n="notasTecnicas">Notas técnicas</span>
+        <textarea id="r-not" data-i18n="notasPh" placeholder="Altura, diámetro, peso, color vidrio..."></textarea>
+      </div>
+
+      <!-- 04 ARCHIVOS -->
+      <div class="card">
+        <div class="ctitle"><span style="color:var(--gold)">04</span> <span data-i18n="archivos">Archivos</span>
+          <span style="font-size:10px;font-weight:400;color:var(--ink3);text-transform:none;letter-spacing:0" data-i18n="archivosOpcional">— opcional, podés completarlo después</span>
+        </div>
+        <span class="flabel" data-i18n="fotoProductoUp">Subir foto del producto</span>
+        <div class="uz" id="z-prod" onclick="document.getElementById('u-prod').click()">
+          <div class="uz-icon">🏷️</div><div style="font-weight:500" data-i18n="fotoProductoUp">Subir foto del producto</div>
+          <div style="font-size:10px;margin-top:2px;color:var(--ink3)" data-i18n="fotoProductoSub">Se muestra en la etiqueta · JPG · PNG</div>
+        </div>
+        <input type="file" id="u-prod" accept="image/*" style="display:none" onchange="upImg(this,'z-prod','prodImg','p-prod')">
+        <img id="p-prod" style="display:none;width:100%;max-height:140px;object-fit:cover;border-radius:var(--rs);margin-top:7px;border:1px solid var(--cream3)">
+
+        <span class="flabel" style="margin-top:14px" data-i18n="fotoBotella">Foto botella entera</span>
         <div class="uz" id="z-bot" onclick="document.getElementById('u-bot').click()">
-          <div class="uz-icon">📷</div><div style="font-weight:500">Subir foto de la botella</div>
+          <div class="uz-icon">📷</div><div style="font-weight:500" data-i18n="fotoBotellaUp">Subir foto de la botella</div>
           <div style="font-size:10px;margin-top:2px;color:var(--ink3)">JPG · PNG · WEBP</div>
         </div>
         <input type="file" id="u-bot" accept="image/*" style="display:none" onchange="upImg(this,'z-bot','bot','p-bot')">
         <img id="p-bot" style="display:none;width:100%;max-height:140px;object-fit:cover;border-radius:var(--rs);margin-top:7px;border:1px solid var(--cream3)">
-        <span class="flabel">Foto fondo / número de molde</span>
+
+        <span class="flabel" data-i18n="fotoFondo">Foto fondo / número de molde</span>
         <div class="uz" id="z-bom" onclick="document.getElementById('u-bom').click()">
-          <div class="uz-icon">🔍</div><div style="font-weight:500">Subir foto del fondo</div>
+          <div class="uz-icon">🔍</div><div style="font-weight:500" data-i18n="fotoFondoUp">Subir foto del fondo</div>
         </div>
         <input type="file" id="u-bom" accept="image/*" style="display:none" onchange="upImg(this,'z-bom','bom','p-bom')">
         <img id="p-bom" style="display:none;width:100%;max-height:140px;object-fit:cover;border-radius:var(--rs);margin-top:7px;border:1px solid var(--cream3)">
-        <span class="flabel">Plano técnico</span>
+
+        <span class="flabel" data-i18n="planoTecnico">Plano técnico</span>
         <div class="uz" id="z-pln" onclick="document.getElementById('u-pln').click()">
-          <div class="uz-icon">📐</div><div style="font-weight:500">Subir plano PDF</div>
+          <div class="uz-icon">📐</div><div style="font-weight:500" data-i18n="subirPlanoPdf">Subir plano PDF</div>
         </div>
         <input type="file" id="u-pln" accept=".pdf,application/pdf" style="display:none" onchange="upFile(this,'z-pln','pln','plnN')">
-      </div>
 
-      <!-- 02 DATOS BOTELLA -->
-      <div class="card">
-        <div class="ctitle"><span style="color:var(--gold)">02</span> Datos de la botella</div>
-        <span class="flabel">Código / Referencia <span class="req">*</span></span>
-        <input type="text" id="r-cod" placeholder="Ej: FT-SINGLE-70-75">
-        <span class="flabel">Modelo <span class="req">*</span></span>
-        <input type="text" id="r-mod" placeholder="Ej: SINGLE, PRESTIGE, BELUGA...">
-        <span class="flabel">Fabricante de vidrio <span class="req">*</span></span>
-        <input type="text" id="r-mak" placeholder="Ej: Saverglass, O-I, Ardagh...">
-        <span class="flabel">Número de molde</span>
-        <input type="text" id="r-mol" placeholder="Ej: 3003">
-        <span class="flabel">Número de cuño</span>
-        <input type="text" id="r-cuno" placeholder="Ej: A1, B2...">
-        <div class="g2">
-          <div><span class="flabel">Capacidad</span><input type="text" id="r-cap" placeholder="Ej: 70cl"></div>
-          <div><span class="flabel">Bague / Cierre</span><input type="text" id="r-fin" placeholder="Ej: SB 27.8"></div>
-        </div>
-        <span class="flabel">Notas técnicas</span>
-        <textarea id="r-not" placeholder="Altura, diámetro, peso, color vidrio..."></textarea>
-      </div>
-
-      <!-- 03 MARCA Y PROYECTO -->
-      <div class="card card-gold">
-        <div class="ctitle"><span style="color:var(--gold)">03</span> Marca y proyecto</div>
-        <span class="flabel">Marca <span class="req">*</span></span>
-        <input type="text" id="r-marca" placeholder="Ej: North of Scotland, Glenfiddich...">
-        <span class="flabel">Proyecto / Código de diseño</span>
-        <input type="text" id="r-pro" placeholder="Ej: IDA-CAT3018-40X65-AB">
-
-        <span class="flabel" style="margin-top:14px">Artículos del proyecto</span>
-        <div style="font-size:11px;color:var(--ink3);margin-bottom:6px">Seleccioná todos los que aplican para esta marca</div>
-        <div id="reg-art-list"></div>
-        <button type="button" class="btn-add" onclick="addRegArt()">+ Agregar artículo</button>
-      </div>
-
-      <!-- 04 DISEÑO Y ADICIONALES -->
-      <div class="card">
-        <div class="ctitle"><span style="color:var(--gold)">04</span> Diseño / Approval sheet &amp; archivos
-          <span style="font-size:10px;font-weight:400;color:var(--ink3);text-transform:none;letter-spacing:0">— opcional</span>
-        </div>
-        <span class="flabel">Diseño principal</span>
+        <span class="flabel" data-i18n="disenoPrincipal">Diseño principal</span>
         <div class="uz" id="z-des" onclick="document.getElementById('u-des').click()">
-          <div class="uz-icon">🎨</div><div style="font-weight:500">Subir imagen o PDF del diseño</div>
-          <div style="font-size:10px;margin-top:2px;color:var(--ink3)">También podés pegar con Ctrl+V / Cmd+V</div>
+          <div class="uz-icon">🎨</div><div style="font-weight:500" data-i18n="subirImagenPdf">Subir imagen o PDF del diseño</div>
+          <div style="font-size:10px;margin-top:2px;color:var(--ink3)" data-i18n="pegarCtrlV">También podés pegar con Ctrl+V / Cmd+V</div>
         </div>
         <input type="file" id="u-des" accept="image/*,application/pdf,.pdf" style="display:none" onchange="upDes(this,'z-des','p-des')">
         <img id="p-des" style="display:none;width:100%;max-height:160px;object-fit:contain;border-radius:var(--rs);margin-top:7px;background:var(--cream);border:1px solid var(--cream3)">
-        <span class="flabel" style="margin-top:14px">Fotos y archivos adicionales</span>
-        <div style="font-size:11px;color:var(--ink3);margin-bottom:4px">Imágenes &gt;2MB se comprimen automáticamente.</div>
+
+        <span class="flabel" style="margin-top:14px" data-i18n="fotosAdicionales">Fotos y archivos adicionales</span>
+        <div style="font-size:11px;color:var(--ink3);margin-bottom:4px" data-i18n="comprimenAuto">Imágenes &gt;2MB se comprimen automáticamente.</div>
         <div id="reg-extras-list" class="attach-list"></div>
-        <button type="button" class="btn-add" onclick="document.getElementById('u-extra-img').click()">📷 Foto</button>
-        <button type="button" class="btn-add" onclick="document.getElementById('u-extra-pdf').click()" style="margin-left:6px">📎 PDF</button>
+        <button type="button" class="btn-add" onclick="document.getElementById('u-extra-img').click()" data-i18n="foto">📷 Foto</button>
+        <button type="button" class="btn-add" onclick="document.getElementById('u-extra-pdf').click()" style="margin-left:6px" data-i18n="pdf">📎 PDF</button>
         <input type="file" id="u-extra-img" accept="image/*" style="display:none" onchange="addRegExtra(this,'img')">
         <input type="file" id="u-extra-pdf" accept=".pdf,application/pdf" style="display:none" onchange="addRegExtra(this,'pdf')">
       </div>
 
       <!-- 05 RECEPCION -->
       <div class="card">
-        <div class="ctitle"><span style="color:var(--gold)">05</span> Lugar de recepción</div>
+        <div class="ctitle"><span style="color:var(--gold)">05</span> <span data-i18n="recepcionTitulo">Recepción</span></div>
+        <div style="font-size:11px;color:var(--ink3);margin-bottom:8px" data-i18n="recepcionSeleccion">Elegí el estado de recepción</div>
         <div class="chips" id="lc">
-          <div class="chip" data-v="ARG" onclick="selChip(this,'lc')">Argentina</div>
-          <div class="chip" data-v="ASIA" onclick="selChip(this,'lc')">Asia</div>
-          <div class="chip on" data-v="BOTH" onclick="selChip(this,'lc')">Argentina + Asia</div>
-          <div class="chip chip-pend" data-v="PEND" onclick="selChip(this,'lc')">Pendiente</div>
+          <div class="chip" data-v="ARG" onclick="selChip(this,'lc')" data-i18n="argentina">Argentina</div>
+          <div class="chip" data-v="ASIA" onclick="selChip(this,'lc')" data-i18n="asia">Asia</div>
+          <div class="chip" data-v="BOTH" onclick="selChip(this,'lc')">Argentina + Asia</div>
+          <div class="chip chip-pend" data-v="PEND" onclick="selChip(this,'lc')" data-i18n="pendiente">Pendiente</div>
         </div>
-        <span class="flabel">Fecha de recepción <span class="req">*</span></span>
-        <div class="date-wrap">
-          <input type="date" id="r-dat">
-          <button type="button" class="btn btn-outline btn-sm" id="btn-pend-date" onclick="togglePendDate()" style="flex-shrink:0;height:40px;margin-top:0">Pendiente</button>
-        </div>
-        <div id="pend-date-note" style="display:none;font-size:11px;color:var(--gold);margin-top:5px;font-style:italic">⏳ Fecha pendiente de confirmar</div>
       </div>
 
-      <button class="btn btn-primary" onclick="save()">Guardar botella</button>
+      <button class="btn btn-primary" onclick="save()" data-i18n="guardarBotella">Guardar botella</button>
       <button class="btn btn-outline" onclick="clearF()" style="margin-top:5px">Limpiar formulario</button>
     </div>
 
     <!-- ETIQUETA -->
-    <div id="p-lbl" class="pane">
-      <div class="card" style="margin-top:0">
-        <div class="ctitle">Seleccionar botella</div>
-        <select id="lbl-sel" onchange="renderLbl()"><option value="">— Elegir botella —</option></select>
-      </div>
-      <div id="lbl-out"></div>
-    </div>
-
     <!-- FICHA A4 -->
     <div id="p-a4" class="pane">
       <div class="card" style="margin-top:0">
-        <div class="ctitle">Seleccionar botella</div>
-        <select id="a4-sel" onchange="renderA4prev()"><option value="">— Elegir botella —</option></select>
+        <div class="ctitle" data-i18n="seleccionarBotella">Seleccionar botella</div>
+        <select id="a4-sel" onchange="renderA4prev()"><option value="" id="sel-placeholder">— Elegir botella —</option></select>
       </div>
       <div id="a4-out"></div>
     </div>
@@ -354,16 +368,166 @@ var DB=[],CUR=null,datePend=false;
 var TXT = {
   marca:['Marca','Brand'], modelo:['Modelo','Model'], codigo:['Código','Code'],
   diseno:['Diseño','Design'], fabricante:['Fabricante','Manufacturer'], molde:['Molde','Mold'],
-  cuno:['Cuño','Stamp'], capacidad:['Capacidad','Capacity'], bague:['Bague','Finish'],
+  cuno:['Cuño','Stamp'], moldeDiseno:['Molde diseño','Design mold'], capacidad:['Capacidad','Capacity'], bague:['Bague','Finish'],
   recepcion:['Recepción','Receipt'], fecha:['Fecha','Date'], pendiente:['⏳ Pendiente','⏳ Pending'],
   articulos:['Artículos','Articles'], pegado:['pegado','glued at'], clientesProy:['Marcas y proyectos','Brands & projects'],
   disenoTitle:['Diseño / Approval sheet','Design / Approval sheet'], planoTitle:['Plano técnico','Technical drawing'],
   archivosAd:['Archivos adicionales','Additional files'], notasTitle:['Notas técnicas','Technical notes'],
-  argentina:['Argentina','Argentina'], asia:['Asia','Asia'], ambos:['ARG + Asia','ARG + Asia']
+  argentina:['Argentina','Argentina'], asia:['Asia','Asia'], ambos:['ARG + Asia','ARG + Asia'],
+  verDiseno2:['Ver diseño','View design'], abrir:['Abrir','Open'],
+  abrirImagen:['Abrir imagen','Open image'], abrirPdf:['Abrir PDF','Open PDF'],
+  articulosProyecto2:['Artículos del proyecto','Project articles']
 };
 function t2(key){return TXT[key][0]+' / '+TXT[key][1];}
-var FD={bot:null,bom:null,pln:null,plnN:null,des:null,desN:null,desImg:false,extras:[],arts:[]};
-var ART_TYPES=['Tapones','Collarines','Etiquetas','Otro'];
+
+// ===== FULL UI I18N =====
+var LANG = localStorage.getItem('apholos_lang') || 'es';
+var UI = {
+  tabBiblioteca:['Biblioteca','Library'], tabRegistrar:['Registrar','Register'], tabEtiqueta:['Etiqueta','Label'], tabTechSheet:['Tech Sheet','Tech Sheet'],
+  subtitle:['Registro y Biblioteca de Botellas','Bottle Registry & Library'],
+  botellas:['botellas','bottles'], botella:['botella','bottle'],
+  // Library filters
+  filtrarBiblio:['Filtrar biblioteca','Filter library'],
+  buscarPlaceholder:['Buscar por marca, modelo, código...','Search by brand, model, code...'],
+  marcaPlaceholder:['Marca...','Brand...'],
+  modeloPlaceholder:['Modelo de botella...','Bottle model...'],
+  fabricantePlaceholder:['Fabricante...','Manufacturer...'],
+  sincronizar:['Sincronizar con Google','Sync with Google'],
+  estadoRecepcion:['Estado de recepción','Receipt status'],
+  todas:['Todas','All'], recibidas:['✓ Recibidas','✓ Received'], pendientes:['⏳ Pendientes','⏳ Pending'],
+  biblioVacia:['Biblioteca vacía','Library empty'],
+  sinResultados:['Sin resultados','No results'],
+  registrarPrimera:['Registrá la primera botella para comenzar.','Register the first bottle to get started.'],
+  ningunaCoincide:['Ninguna botella coincide con los filtros.','No bottles match the filters.'],
+  btnRegistrarPrimera:['+ Registrar primera botella','+ Register first bottle'],
+  marcaExtra:['+%n marca','+%n brand'], marcasExtra:['+%n marcas','+%n brands'],
+  plano:['📐 Plano','📐 Drawing'], diseno_:['🎨 Diseño','🎨 Design'], adj:['📎 %n adj.','📎 %n attach.'],
+  // Detail
+  volver:['← Volver','← Back'],
+  recibida:['✓ Recibida','✓ Received'],
+  fotos:['Fotos','Photos'], fotoProducto:['Foto producto','Product photo'], agregar:['Agregar','Add'], fondo:['Fondo','Bottom'],
+  datosTecnicos:['Datos técnicos','Technical data'],
+  notasTecnicas:['Notas técnicas','Technical notes'], notasPlaceholder:['Notas técnicas...','Technical notes...'],
+  guardarNotas:['Guardar notas','Save notes'],
+  lugarRecepcion:['Lugar de recepción','Receipt location'],
+  fechaRecepcion:['Fecha de recepción','Receipt date'],
+  marcarPendiente:['Marcar pendiente','Mark pending'],
+  guardarRecepcion:['Guardar recepción','Save receipt'],
+  marcasProyectos:['Marcas y proyectos','Brands & projects'],
+  principal:['principal','primary'],
+  agregarMarcaProyecto:['+ Agregar marca / proyecto','+ Add brand / project'],
+  marcaPh:['Marca','Brand'], proyectoPh:['Proyecto / diseño','Project / design'],
+  agregarMarca:['+ Agregar marca','+ Add brand'],
+  articulosProyecto:['Artículos del proyecto','Project articles'],
+  agregarArticulo:['+ Agregar artículo','+ Add article'],
+  sinArticulos:['Sin artículos registrados.','No articles registered.'],
+  alturaPegado:['Altura pegado (mm)','Glue height (mm)'],
+  verDiseno:['Ver diseño','View design'],
+  quitarDiseno:['✕ Quitar diseño','✕ Remove design'],
+  subirDiseno:['🎨 Subir diseño','🎨 Upload design'],
+  sinDisenoAdj:['Sin diseño adjunto','No design attached'],
+  planoTecnico:['Plano técnico','Technical drawing'],
+  verPlanoPdf:['📐 Ver plano PDF','📐 View drawing PDF'],
+  eliminarPlano:['Eliminar plano','Delete drawing'],
+  subirPlanoPdf:['Subir plano PDF','Upload drawing PDF'],
+  disenoApproval:['Diseño / Approval sheet','Design / Approval sheet'],
+  abrirImagen:['Abrir imagen','Open image'], abrirPdf:['Abrir PDF','Open PDF'],
+  eliminarDiseno:['Eliminar diseño','Delete design'],
+  reemplazar:['Reemplazar','Replace'],
+  subirImagenPdf:['Subir imagen o PDF','Upload image or PDF'],
+  pegarCtrlV:['También podés pegar con Ctrl+V','You can also paste with Ctrl+V'],
+  archivosAdicionales:['Archivos adicionales','Additional files'],
+  sinArchivosAd:['Sin archivos adicionales.','No additional files.'],
+  foto:['📷 Foto','📷 Photo'], pdf:['📎 PDF','📎 PDF'],
+  abrir:['Abrir','Open'],
+  eliminarBotella:['Eliminar esta botella','Delete this bottle'],
+  techSheetBtn:['Tech Sheet','Tech Sheet'],
+  // Registration form
+  marcaProyecto:['Marca y proyecto','Brand & project'],
+  diseno:['Diseño','Design'], fecha:['Fecha','Date'], fabricante:['Fabricante','Manufacturer'],
+  marcaReq:['Marca','Brand'], marcaPlaceholder2:['Ej: North of Scotland, Glenfiddich...','E.g: North of Scotland, Glenfiddich...'],
+  proyectoCodigo:['Proyecto / Código de diseño','Project / Design code'],
+  proyectoPlaceholder:['Ej: IDA-CAT3018-40X65-AB','E.g: IDA-CAT3018-40X65-AB'],
+  moldeDisenoLabel:['Número de molde de diseño','Design mold number'],
+  moldeDisenoPh:['Ej: M-2024-08','E.g: M-2024-08'],
+  articulosSeleccion:['Seleccioná todos los que aplican para esta marca','Select all that apply to this brand'],
+  tipoTapon:['Tipo de tapón / corcho','Cork / closure type'],
+  quitar:['✕ Quitar','✕ Remove'],
+  datosBotella:['Datos de la botella','Bottle data'],
+  codigoRef:['Código / Referencia','Code / Reference'],
+  codigoPh:['Ej: FT-SINGLE-70-75','E.g: FT-SINGLE-70-75'],
+  modeloLabel:['Modelo','Model'], modeloPh:['Ej: SINGLE, PRESTIGE, BELUGA...','E.g: SINGLE, PRESTIGE, BELUGA...'],
+  fabricanteVidrio:['Fabricante de vidrio','Glass manufacturer'],
+  fabricantePh:['Escribí o elegí abajo','Type or pick below'],
+  numeroMolde:['Número de molde','Mold number'], moldePh:['Ej: 3003','E.g: 3003'],
+  numeroCuno:['Número de cuño','Stamp number'], cunoPh:['Ej: A1, B2...','E.g: A1, B2...'],
+  capacidadLabel:['Capacidad','Capacity'], capacidadPh:['Ej: 70cl','E.g: 70cl'],
+  bagueLabel:['Bague / Cierre','Finish / Closure'], baguePh:['Ej: SB 27.8','E.g: SB 27.8'],
+  notasPh:['Altura, diámetro, peso, color vidrio...','Height, diameter, weight, glass color...'],
+  archivos:['Archivos','Files'],
+  archivosOpcional:['— opcional, podés completarlo después','— optional, can be completed later'],
+  fotoProductoUp:['Subir foto del producto','Upload product photo'],
+  fotoProductoSub:['Se muestra en la etiqueta · JPG · PNG','Shown on the label · JPG · PNG'],
+  fotoBotella:['Foto botella entera','Whole bottle photo'],
+  fotoBotellaUp:['Subir foto de la botella','Upload bottle photo'],
+  fotoFondo:['Foto fondo / número de molde','Bottom photo / mold number'],
+  fotoFondoUp:['Subir foto del fondo','Upload bottom photo'],
+  disenoPrincipal:['Diseño principal','Main design'],
+  fotosAdicionales:['Fotos y archivos adicionales','Additional photos & files'],
+  comprimenAuto:['Imágenes >2MB se comprimen automáticamente.','Images >2MB are compressed automatically.'],
+  recepcionTitulo:['Recepción','Receipt'],
+  recepcionSeleccion:['Elegí el estado de recepción','Select the receipt status'],
+  guardarBotella:['Guardar botella','Save bottle'],
+  limpiarFormulario:['Limpiar formulario','Clear form'],
+  completarCampos:['Completá los campos marcados con *','Fill the fields marked with *'],
+  elegirRecepcion:['Elegí el estado de recepción','Choose the receipt status'],
+  // sections
+  s01:['Marca y proyecto','Brand & project'],
+  s02:['Tipo de producto','Product type'],
+  s03:['Datos de la botella','Bottle data'],
+  s04:['Archivos','Files'],
+  s05:['Recepción','Receipt'],
+  // select bottle
+  selectBottle:['— Elegir botella —','— Select bottle —'],
+  seleccionarBotella:['Seleccionar botella','Select bottle'],
+  imprimirEtiqueta:['🖨 Imprimir etiqueta (10 × 15 cm)','🖨 Print label (10 × 15 cm)'],
+  imprimirTech:['🖨 Imprimir / Guardar como PDF','🖨 Print / Save as PDF'],
+  vistaPrevia:['VISTA PREVIA','PREVIEW'],
+  vistaPreviaTech:['VISTA PREVIA TECH SHEET','TECH SHEET PREVIEW'],
+  imprimir10x15:['🖨 Imprimir esta ficha (10 × 15 cm)','🖨 Print this sheet (10 × 15 cm)']
+};
+function tr(key){var e=UI[key];if(!e)return key;return LANG==='en'?e[1]:e[0];}
+function trN(key,n){return tr(key).replace('%n',n);}
+function setLang(l){
+  LANG=l;
+  try{localStorage.setItem('apholos_lang',l);}catch(e){}
+  applyI18n();
+  renderLib();
+  if(CUR)renderDet();
+  renderA4prev();
+}
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key=el.getAttribute('data-i18n');
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA'){el.placeholder=tr(key);}
+    else{el.textContent=tr(key);}
+  });
+  document.querySelectorAll('.lang-btn').forEach(function(b){
+    b.classList.toggle('on', b.dataset.lang===LANG);
+  });
+}
+var FD={bot:null,bom:null,prodImg:null,pln:null,plnN:null,des:null,desN:null,desImg:false,extras:[],arts:[]};
+var ART_TYPES_ES=['Tapones','Collarines','Etiquetas','Otro'];
+var ART_TYPES_EN=['Stoppers','Collars','Labels','Other'];
+var ART_TYPES=ART_TYPES_ES; // backward compat for stored values - always store ES key
+var CORK_TYPES_ES=['Micro','Natural','Sintético','Muselet','GPI 33/400','GPI 28/400'];
+var CORK_TYPES_EN=['Micro','Natural','Synthetic','Muselet','GPI 33/400','GPI 28/400'];
+function artLabel(t){var i=ART_TYPES_ES.indexOf(t);return (i>=0&&LANG==='en')?ART_TYPES_EN[i]:t;}
+function corkLabel(c){var i=CORK_TYPES_ES.indexOf(c);return (i>=0&&LANG==='en')?CORK_TYPES_EN[i]:c;}
+function getArtTypes(){return LANG==='en'?ART_TYPES_EN:ART_TYPES_ES;}
+function getCorkTypes(){return LANG==='en'?CORK_TYPES_EN:CORK_TYPES_ES;}
+function artLabel2(t){var i=ART_TYPES_ES.indexOf(t);return i>=0?ART_TYPES_ES[i]+'/'+ART_TYPES_EN[i]:t;}
+function corkLabel2(c){var i=CORK_TYPES_ES.indexOf(c);return i>=0?CORK_TYPES_ES[i]+'/'+CORK_TYPES_EN[i]:c;}
 var fRecvState=''; // ''=all, 'recv'=received, 'pend'=pending
 
 // ── CONFIGURACIÓN GOOGLE SCRIPT ──────────────────────────────
@@ -375,7 +539,7 @@ var ONLINE = false; // se activa si SCRIPT_URL está configurada
 
 function init(){
   document.getElementById('hdr-logo').src=LOGO_WHITE_B64;
-  document.getElementById('r-dat').value=new Date().toISOString().split('T')[0];
+  applyI18n();
   ONLINE = SCRIPT_URL && SCRIPT_URL.length > 10;
   // ALWAYS load local data first - this is the source of truth
   try{var r=localStorage.getItem('apholos_v5');DB=r?JSON.parse(r):[];}catch(e){DB=[];}
@@ -520,7 +684,7 @@ function persistDelete(id){
 }
 function upd(){
   document.getElementById('cnt').textContent=DB.length+(DB.length===1?' botella':' botellas');
-  fillSel('lbl-sel');fillSel('a4-sel');renderLib();
+  fillSel('a4-sel');renderLib();
 }
 function toast(msg,dur){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},dur||2500);}
 
@@ -528,19 +692,12 @@ function go(id){
   document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
   document.getElementById('p-'+id).classList.add('on');
-  var tabs=['lib','reg','lbl','a4'];
+  var tabs=['lib','reg','a4'];
   var i=tabs.indexOf(id);if(i>=0)document.querySelectorAll('.tab')[i].classList.add('on');
 }
 function selChip(el,gid){document.querySelectorAll('#'+gid+' .chip').forEach(function(c){c.classList.remove('on');});el.classList.add('on');}
 function getChip(gid){var a=document.querySelector('#'+gid+' .chip.on');return a?a.dataset.v:'';}
 function selFpill(el){document.querySelectorAll('.fpill').forEach(function(p){p.classList.remove('on');});el.classList.add('on');fRecvState=el.dataset.v;renderLib();}
-
-function togglePendDate(){
-  datePend=!datePend;
-  var inp=document.getElementById('r-dat');var btn=document.getElementById('btn-pend-date');var note=document.getElementById('pend-date-note');
-  if(datePend){inp.style.opacity='.35';inp.disabled=true;btn.style.borderColor='var(--gold)';btn.style.color='var(--gold)';note.style.display='block';}
-  else{inp.style.opacity='1';inp.disabled=false;btn.style.borderColor='';btn.style.color='';note.style.display='none';}
-}
 
 /* COMPRESSION */
 function compressImage(file,cb){
@@ -620,7 +777,7 @@ var regArtCount=0;
 function addRegArt(){
   regArtCount++;
   var id='ra-'+regArtCount;
-  FD.arts.push({id:id,tipo:'',altPeg:'',desData:null,desN:null,desImg:false});
+  FD.arts.push({id:id,tipo:'',corkType:'',altPeg:'',desData:null,desN:null,desImg:false});
   renderRegArts();
 }
 function removeRegArt(id){
@@ -630,26 +787,38 @@ function renderRegArts(){
   var el=document.getElementById('reg-art-list');
   el.innerHTML=FD.arts.map(function(a,i){
     return '<div class="art-block" id="ab-'+a.id+'">'
-      +'<div class="art-block-title"><span>Artículo '+(i+1)+'</span>'
-      +'<button type="button" class="btn btn-danger btn-sm" onclick="removeRegArt(\''+a.id+'\')" style="padding:3px 8px;font-size:11px">✕ Quitar</button></div>'
+      +'<div class="art-block-title"><span>'+(LANG==='en'?'Article ':'Artículo ')+(i+1)+'</span>'
+      +'<button type="button" class="btn btn-danger btn-sm" onclick="removeRegArt(\''+a.id+'\')" style="padding:3px 8px;font-size:11px">'+tr('quitar')+'</button></div>'
       +'<div class="art-chip-group">'
-      +ART_TYPES.map(function(t){return '<div class="art-chip'+(a.tipo===t?' on':'')+'" onclick="setArtTipo(\''+a.id+'\',\''+t+'\',this)">'+t+'</div>';}).join('')
+      +ART_TYPES_ES.map(function(t){return '<div class="art-chip'+(a.tipo===t?' on':'')+'" onclick="setArtTipo(\''+a.id+'\',\''+t+'\',this)">'+artLabel(t)+'</div>';}).join('')
       +'</div>'
-      +'<span class="flabel" style="font-size:10px;margin-top:0">Altura de pegado (mm)</span>'
+      +(a.tipo==='Tapones'?(
+        '<span class="flabel" style="font-size:10px;margin-top:0">'+tr('tipoTapon')+'</span>'
+        +'<div class="art-chip-group" id="cork-'+a.id+'">'
+        +CORK_TYPES_ES.map(function(c){return '<div class="art-chip'+(a.corkType===c?' on':'')+'" onclick="setArtCork(\''+a.id+'\',\''+c+'\',this)">'+corkLabel(c)+'</div>';}).join('')
+        +'</div>'
+      ):'')
+      +'<span class="flabel" style="font-size:10px;margin-top:0">'+tr('alturaPegado')+'</span>'
       +'<input type="number" placeholder="Ej: 150" value="'+(a.altPeg||'')+'" oninput="setArtAlt(\''+a.id+'\',this.value)" style="margin-bottom:8px">'
-      +'<span class="flabel" style="font-size:10px;margin-top:0">Diseño de este artículo (imagen o PDF)</span>'
+      +'<span class="flabel" style="font-size:10px;margin-top:0">'+(LANG==='en'?'Design for this article (image or PDF)':'Diseño de este artículo (imagen o PDF)')+'</span>'
       +(a.desData
         ?(a.desImg?'<img src="'+a.desData+'" style="width:100%;max-height:100px;object-fit:contain;border-radius:4px;margin-bottom:4px;background:var(--cream);border:1px solid var(--cream3)">':'')
-        +'<button type="button" class="btn btn-outline btn-sm" onclick="openArtDes(\'reg\','+i+')" style="margin-bottom:4px">Ver archivo</button>'
-        +'<button type="button" class="btn-add" style="margin-left:6px" onclick="clearArtDes(\''+a.id+'\')">✕ Quitar</button>'
+        +'<button type="button" class="btn btn-outline btn-sm" onclick="openArtDes(\'reg\','+i+')" style="margin-bottom:4px">'+(LANG==='en'?'View file':'Ver archivo')+'</button>'
+        +'<button type="button" class="btn-add" style="margin-left:6px" onclick="clearArtDes(\''+a.id+'\')">'+tr('quitar')+'</button>'
         :'<div class="uz" onclick="document.getElementById(\'udes-'+a.id+'\').click()" style="padding:10px">'
-        +'<div style="font-size:12px">🎨 Subir diseño de este artículo</div></div>')
+        +'<div style="font-size:12px">'+(LANG==='en'?'🎨 Upload design for this article':'🎨 Subir diseño de este artículo')+'</div></div>')
       +'<input type="file" id="udes-'+a.id+'" accept="image/*,application/pdf,.pdf" style="display:none" onchange="upArtDes(this,\''+a.id+'\')">'
       +'</div>';
   }).join('');
 }
 function setArtTipo(id,tipo,el){
   var a=FD.arts.find(function(x){return x.id===id;});if(!a)return;a.tipo=tipo;
+  el.closest('.art-chip-group').querySelectorAll('.art-chip').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on');
+  renderRegArts();
+}
+function setArtCork(id,cork,el){
+  var a=FD.arts.find(function(x){return x.id===id;});if(!a)return;a.corkType=cork;
   el.closest('.art-chip-group').querySelectorAll('.art-chip').forEach(function(c){c.classList.remove('on');});
   el.classList.add('on');
 }
@@ -691,44 +860,57 @@ function v(id){return document.getElementById(id).value.trim();}
 
 function save(){
   var cod=v('r-cod'),mod=v('r-mod'),mak=v('r-mak'),marca=v('r-marca');
-  var dat=datePend?'PENDIENTE':v('r-dat');
-  if(!cod||!mod||!mak||!marca||!dat){toast('Completá los campos marcados con *');return;}
-  var b={id:Date.now().toString(),cod:cod,mod:mod,mak:mak,marca:marca,mol:v('r-mol'),cuno:v('r-cuno'),cap:v('r-cap'),fin:v('r-fin'),not:v('r-not'),pro:v('r-pro'),loc:getChip('lc'),dat:dat,
-    bot:FD.bot,bom:FD.bom,pln:FD.pln,plnN:FD.plnN,des:FD.des,desN:FD.desN,desImg:FD.desImg,
+  var loc=getChip('lc');
+  if(!cod||!mod||!mak||!marca){toast(tr('completarCampos'));return;}
+  if(!loc){toast(tr('elegirRecepcion'));return;}
+  var dat=new Date().toISOString().split('T')[0];
+  var b={id:Date.now().toString(),cod:cod,mod:mod,mak:mak,marca:marca,mol:v('r-mol'),cuno:v('r-cuno'),cap:v('r-cap'),fin:v('r-fin'),not:v('r-not'),pro:v('r-pro'),molD:v('r-molD'),loc:loc,dat:dat,
+    bot:FD.bot,bom:FD.bom,prodImg:FD.prodImg,pln:FD.pln,plnN:FD.plnN,des:FD.des,desN:FD.desN,desImg:FD.desImg,
     extras:FD.extras.slice(),arts:FD.arts.slice(),extraMarcas:[]};
-  DB.unshift(b);persist();persistSave(b);upd();toast('Botella guardada ✓');clearF();go('lib');
+  DB.unshift(b);persist();persistSave(b);upd();toast(LANG==='en'?'Bottle saved ✓':'Botella guardada ✓');clearF();go('lib');
 }
 
 function clearF(){
-  ['r-cod','r-mod','r-mak','r-marca','r-mol','r-cuno','r-cap','r-fin','r-not','r-pro'].forEach(function(id){document.getElementById(id).value='';});
-  document.getElementById('r-dat').value=new Date().toISOString().split('T')[0];
-  if(datePend)togglePendDate();
-  FD={bot:null,bom:null,pln:null,plnN:null,des:null,desN:null,desImg:false,extras:[],arts:[]};
+  ['r-cod','r-mod','r-mak','r-marca','r-mol','r-cuno','r-cap','r-fin','r-not','r-pro','r-molD'].forEach(function(id){document.getElementById(id).value='';});
+  FD={bot:null,bom:null,prodImg:null,pln:null,plnN:null,des:null,desN:null,desImg:false,extras:[],arts:[]};
   regArtCount=0;
-  [['z-bot','📷','Subir foto de la botella','JPG · PNG · WEBP'],
-   ['z-bom','🔍','Subir foto del fondo',''],
-   ['z-pln','📐','Subir plano PDF',''],
-   ['z-des','🎨','Subir imagen o PDF del diseño','También podés pegar con Ctrl+V / Cmd+V']].forEach(function(p){
+  [['z-prod','🏷️',tr('fotoProductoUp'),tr('fotoProductoSub')],
+   ['z-bot','📷',tr('fotoBotellaUp'),'JPG · PNG · WEBP'],
+   ['z-bom','🔍',tr('fotoFondoUp'),''],
+   ['z-pln','📐',tr('subirPlanoPdf'),''],
+   ['z-des','🎨',tr('subirImagenPdf'),tr('pegarCtrlV')]].forEach(function(p){
     var z=document.getElementById(p[0]);
     z.innerHTML='<div class="uz-icon">'+p[1]+'</div><div style="font-weight:500">'+p[2]+'</div>'+(p[3]?'<div style="font-size:10px;margin-top:2px;color:var(--ink3)">'+p[3]+'</div>':'');
     z.classList.remove('ok');
   });
-  ['p-bot','p-bom','p-des'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});
+  ['p-bot','p-bom','p-prod','p-des'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});
   document.getElementById('reg-extras-list').innerHTML='';
   document.getElementById('reg-art-list').innerHTML='';
-  selChip(document.querySelector('#lc .chip[data-v="BOTH"]'),'lc');
+  document.querySelectorAll('#lc .chip').forEach(function(c){c.classList.remove('on');});
+  document.querySelectorAll('#mak-chips .chip').forEach(function(c){c.classList.remove('on');});
 }
+function pickMak(el){
+  document.querySelectorAll('#mak-chips .chip').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on');
+  document.getElementById('r-mak').value=el.dataset.v;
+}
+document.addEventListener('input',function(e){
+  if(e.target&&e.target.id==='r-mak'){
+    var val=e.target.value;
+    document.querySelectorAll('#mak-chips .chip').forEach(function(c){c.classList.toggle('on',c.dataset.v===val);});
+  }
+});
 
-function locL(l){return l==='ARG'?'Argentina':l==='ASIA'?'Asia':l==='PEND'?'Pendiente':'ARG + Asia';}
+function locL(l){return l==='ARG'?tr('argentina'):l==='ASIA'?tr('asia'):l==='PEND'?tr('pendiente').replace('⏳ ',''):tr('ambos');}
 function locL2(l){return l==='ARG'?'Argentina':l==='ASIA'?'Asia':l==='PEND'?t2('pendiente'):'ARG + Asia';}
 function locBadge(l){
-  if(l==='PEND')return '<span class="badge badge-pend">⏳ Pendiente</span>';
+  if(l==='PEND')return '<span class="badge badge-pend">'+tr('pendiente')+'</span>';
   var cl=l==='ARG'?'badge-arg':l==='ASIA'?'badge-asia':'badge-both';
   return '<span class="badge '+cl+'">'+locL(l)+'</span>';
 }
 function recvBadge(b){
   var p=b.dat==='PENDIENTE';
-  return p?'<span class="badge badge-pend">⏳ Pendiente</span>':'<span class="badge badge-recv">✓ Recibida</span>';
+  return p?'<span class="badge badge-pend">'+tr('pendiente')+'</span>':'<span class="badge badge-recv">'+tr('recibida')+'</span>';
 }
 
 function renderLib(){
@@ -751,7 +933,7 @@ function renderLib(){
   });
   var el=document.getElementById('lib');
   if(!list.length){
-    el.innerHTML='<div class="empty"><div class="empty-icon">🍾</div><div class="empty-title">'+(DB.length===0?'Biblioteca vacía':'Sin resultados')+'</div><div class="empty-sub">'+(DB.length===0?'Registrá la primera botella para comenzar.':'Ninguna botella coincide con los filtros.')+'</div>'+(DB.length===0?'<button class="btn btn-gold" onclick="go(\'reg\')" style="width:auto;padding:10px 24px;margin:0 auto">+ Registrar primera botella</button>':'')+'</div>';
+    el.innerHTML='<div class="empty"><div class="empty-icon">🍾</div><div class="empty-title">'+(DB.length===0?tr('biblioVacia'):tr('sinResultados'))+'</div><div class="empty-sub">'+(DB.length===0?tr('registrarPrimera'):tr('ningunaCoincide'))+'</div>'+(DB.length===0?'<button class="btn btn-gold" onclick="go(\'reg\')" style="width:auto;padding:10px 24px;margin:0 auto">'+tr('btnRegistrarPrimera')+'</button>':'')+'</div>';
     return;
   }
   el.innerHTML=list.map(function(b){
@@ -763,7 +945,7 @@ function renderLib(){
       +(b.bot?'<img class="bcard-img" src="'+b.bot+'" loading="lazy">':'')
       +'<div style="flex:1;min-width:0">'
       +'<div class="bcard-marca">'+b.marca+'</div>'
-      +(allMarcas.length>1?'<div style="font-size:10px;color:var(--ink3);margin-bottom:1px">+'+( allMarcas.length-1)+' marca'+(allMarcas.length>2?'s':'')+'</div>':'')
+      +(allMarcas.length>1?'<div style="font-size:10px;color:var(--ink3);margin-bottom:1px">'+trN(allMarcas.length>2?'marcasExtra':'marcaExtra',allMarcas.length-1)+'</div>':'')
       +'<div class="bcard-model">'+b.mod+'</div>'
       +'<div class="bcard-meta">'+b.cod+' · '+b.mak+'</div>'
       +(b.pro?'<div class="bcard-meta">'+b.pro+'</div>':'')
@@ -771,13 +953,13 @@ function renderLib(){
       +recvBadge(b)+' '+locBadge(b.loc)
       +(b.mol?'<span class="badge badge-doc">Molde '+b.mol+'</span>':'')
       +'</div>'
-      +(arts.length?'<div style="margin-top:5px;display:flex;gap:3px;flex-wrap:wrap">'+arts.map(function(a){return '<span class="badge badge-art">'+a.tipo+(a.altPeg?' '+a.altPeg+'mm':'')+'</span>';}).join('')+'</div>':'')
+      +(arts.length?'<div style="margin-top:5px;display:flex;gap:3px;flex-wrap:wrap">'+arts.map(function(a){return '<span class="badge badge-art">'+artLabel(a.tipo)+(a.corkType?' · '+corkLabel(a.corkType):'')+(a.altPeg?' '+a.altPeg+'mm':'')+'</span>';}).join('')+'</div>':'')
       +'</div></div>'
       +'<div style="display:flex;gap:8px;margin-top:7px;padding-top:7px;border-top:1px solid var(--cream2);align-items:center">'
-      +(b.pln?'<span style="font-size:10px;font-weight:600;color:#1A4A8A">📐 Plano</span>':'')
-      +(b.des?'<span style="font-size:10px;font-weight:600;color:var(--gold)">🎨 Diseño</span>':'')
-      +((b.extras||[]).length?'<span style="font-size:10px;color:var(--ink3)">📎 '+(b.extras||[]).length+' adj.</span>':'')
-      +'<span style="font-size:10px;color:'+(isPend?'var(--gold)':'var(--ink3)')+';margin-left:auto;font-style:'+(isPend?'italic':'normal')+'">'+(isPend?'⏳ Pendiente':b.dat)+'</span>'
+      +(b.pln?'<span style="font-size:10px;font-weight:600;color:#1A4A8A">'+tr('plano')+'</span>':'')
+      +(b.des?'<span style="font-size:10px;font-weight:600;color:var(--gold)">'+tr('diseno_')+'</span>':'')
+      +((b.extras||[]).length?'<span style="font-size:10px;color:var(--ink3)">'+trN('adj',(b.extras||[]).length)+'</span>':'')
+      +'<span style="font-size:10px;color:'+(isPend?'var(--gold)':'var(--ink3)')+';margin-left:auto;font-style:'+(isPend?'italic':'normal')+'">'+(isPend?tr('pendiente'):b.dat)+'</span>'
       +'</div></div>';
   }).join('');
 }
@@ -792,128 +974,173 @@ function renderDet(){
     +'<div class="det-marca">'+b.marca+'</div>'
     +'<div class="det-model">'+b.mod+(b.pro?' — '+b.pro:'')+'</div>'
     +'<div class="det-pills">'
-    +'<span class="det-pill '+(isPend?'':'det-pill-gold')+'">'+(isPend?'⏳ Pendiente':'✓ Recibida')+'</span>'
-    +'<span class="det-pill">'+locL(b.loc)+'</span>'
+    +'<span class="det-pill '+(b.loc==='PEND'?'':'det-pill-gold')+'">'+(b.loc==='PEND'?tr('pendiente'):'✓ '+tr('recibida'))+'</span>'
+    +(b.loc!=='PEND'?'<span class="det-pill">'+locL(b.loc)+'</span>':'')
     +'<span class="det-pill">'+b.mak+'</span>'
     +(b.cap?'<span class="det-pill">'+b.cap+'</span>':'')
-    +(b.mol?'<span class="det-pill">Molde '+b.mol+'</span>':'')
+    +(b.mol?'<span class="det-pill">'+tr('numeroMolde')+' '+b.mol+'</span>':'')
     +'</div></div>';
 
   // fotos
-  html+='<div class="stitle">Fotos</div><div class="g2">';
+  html+='<div class="stitle">'+tr('fotos')+'</div><div class="g2" style="grid-template-columns:1fr 1fr 1fr">';
+  html+=b.prodImg?'<div class="img-wrap"><img class="img-thumb" src="'+b.prodImg+'" loading="lazy"><button class="img-del" onclick="clrField(\'prodImg\')">✕</button></div>'
+    :'<div class="img-ph" onclick="document.getElementById(\'eu-prod\').click()"><span style="font-size:20px">🏷️</span><span>'+tr('fotoProducto')+'</span></div><input type="file" id="eu-prod" accept="image/*" style="display:none" onchange="updImg(this,\'prodImg\')">';
   html+=b.bot?'<div class="img-wrap"><img class="img-thumb" src="'+b.bot+'" loading="lazy"><button class="img-del" onclick="clrField(\'bot\')">✕</button></div>'
-    :'<div class="img-ph" onclick="document.getElementById(\'eu-bot\').click()"><span style="font-size:20px">📷</span><span>Agregar</span></div><input type="file" id="eu-bot" accept="image/*" style="display:none" onchange="updImg(this,\'bot\')">';
+    :'<div class="img-ph" onclick="document.getElementById(\'eu-bot\').click()"><span style="font-size:20px">📷</span><span>'+tr('agregar')+'</span></div><input type="file" id="eu-bot" accept="image/*" style="display:none" onchange="updImg(this,\'bot\')">';
   html+=b.bom?'<div class="img-wrap"><img class="img-thumb" src="'+b.bom+'" loading="lazy"><button class="img-del" onclick="clrField(\'bom\')">✕</button></div>'
-    :'<div class="img-ph" onclick="document.getElementById(\'eu-bom\').click()"><span style="font-size:20px">🔍</span><span>Fondo</span></div><input type="file" id="eu-bom" accept="image/*" style="display:none" onchange="updImg(this,\'bom\')">';
+    :'<div class="img-ph" onclick="document.getElementById(\'eu-bom\').click()"><span style="font-size:20px">🔍</span><span>'+tr('fondo')+'</span></div><input type="file" id="eu-bom" accept="image/*" style="display:none" onchange="updImg(this,\'bom\')">';
   html+='</div>';
 
-  // datos técnicos
-  html+='<div class="stitle">Datos técnicos</div><div class="card" style="padding:8px 12px">';
-  var tf=[['Marca',b.marca],['Diseño',b.pro||'—'],['Fabricante',b.mak],['Modelo',b.mod],['Código',b.cod],['Molde',b.mol||'—'],['Cuño',b.cuno||'—'],['Capacidad',b.cap||'—'],['Bague',b.fin||'—'],['Recepción',locL(b.loc)],['Fecha',isPend?'PENDIENTE':b.dat]];
-  html+=tf.map(function(r){var ip=r[1]==='PENDIENTE';return '<div class="frow"><span class="fk">'+r[0]+'</span><span class="fv'+(ip?' fv-pend':'')+'">'+( ip?'⏳ Pendiente':r[1])+'</span></div>';}).join('');
+  // datos técnicos (editable)
+  html+='<div class="stitle">'+tr('datosTecnicos')+'</div><div class="card" style="padding:8px 12px">';
+  var tfEdit=[
+    ['marca','marcaReq','text'],
+    ['pro','diseno','text'],
+    ['molD','moldeDisenoLabel','text'],
+    ['mak','fabricante','text'],
+    ['mod','modeloLabel','text'],
+    ['cod','codigoRef','text'],
+    ['mol','numeroMolde','text'],
+    ['cuno','numeroCuno','text'],
+    ['cap','capacidadLabel','text'],
+    ['fin','bagueLabel','text']
+  ];
+  html+=tfEdit.map(function(r){
+    var field=r[0],val=b[field]||'';
+    return '<div class="frow" style="align-items:center">'
+      +'<span class="fk" style="flex-shrink:0;padding-right:8px">'+tr(r[1])+'</span>'
+      +'<input type="text" id="tf-'+field+'" value="'+val.replace(/"/g,'&quot;')+'" placeholder="—" '
+      +'onblur="saveTechField(\''+field+'\',this.value)" '
+      +'style="text-align:right;border:none;background:transparent;padding:2px 0;font-size:12px;font-weight:500;width:60%">'
+      +'</div>';
+  }).join('');
+  // recepción (read-only here, edited below)
+  html+='<div class="frow"><span class="fk">'+tr('lugarRecepcion')+'</span><span class="fv">'+locL(b.loc)+'</span></div>';
+  html+='<div class="frow"><span class="fk">'+tr('fecha')+'</span><span class="fv'+(isPend?' fv-pend':'')+'">'+(isPend?tr('pendiente'):b.dat)+'</span></div>';
   html+='</div>';
 
-  if(isPend){
-    html+='<div class="card" style="padding:12px 14px;border-color:var(--gold3)">'
-      +'<div style="font-size:11px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">⏳ Confirmar fecha</div>'
-      +'<div class="date-wrap"><input type="date" id="confirm-date" value="'+new Date().toISOString().split('T')[0]+'"><button class="btn btn-gold btn-sm" onclick="confirmDate()" style="flex-shrink:0;height:40px;margin-top:0">Confirmar</button></div></div>';
-  }
+  html+='<div class="stitle">'+tr('lugarRecepcion')+'</div>';
+  html+='<div class="card" style="padding:12px 14px">'
+    +'<div class="chips" id="det-lc">'
+    +[['ARG',tr('argentina')],['ASIA',tr('asia')],['BOTH',tr('ambos')],['PEND',tr('pendiente').replace('⏳ ','')]].map(function(o){
+      var on=b.loc===o[0];
+      var cls='chip'+(o[0]==='PEND'?' chip-pend':'')+(on?' on':'');
+      return '<div class="'+cls+'" data-v="'+o[0]+'" onclick="setDetLoc(this)">'+o[1]+'</div>';
+    }).join('')
+    +'</div>'
+    +'<span class="flabel">'+tr('fechaRecepcion')+'</span>'
+    +'<div class="date-wrap">'
+    +'<input type="date" id="det-dat" value="'+(isPend?new Date().toISOString().split('T')[0]:b.dat)+'" '+(isPend?'style="opacity:.4" disabled':'')+'>'
+    +'<button class="btn '+(isPend?'btn-gold':'btn-outline')+' btn-sm" id="btn-det-pend" onclick="toggleDetPend()" style="flex-shrink:0;height:40px;margin-top:0">'+(isPend?tr('pendiente').replace('⏳ ',''):tr('marcarPendiente'))+'</button>'
+    +'</div>'
+    +'<button class="btn btn-success btn-sm" onclick="saveRecepcion()" style="width:100%;margin-top:8px">'+tr('guardarRecepcion')+'</button>'
+    +'</div>';
 
   // notas
-  html+='<div class="stitle">Notas técnicas</div>';
-  html+='<textarea id="e-not" placeholder="Notas técnicas...">'+( b.not||'')+'</textarea>';
-  html+='<button class="btn btn-success btn-sm" onclick="saveNot()" style="width:100%;margin-top:5px">Guardar notas</button>';
+  html+='<div class="stitle">'+tr('notasTecnicas')+'</div>';
+  html+='<textarea id="e-not" placeholder="'+tr('notasPlaceholder')+'">'+( b.not||'')+'</textarea>';
+  html+='<button class="btn btn-success btn-sm" onclick="saveNot()" style="width:100%;margin-top:5px">'+tr('guardarNotas')+'</button>';
 
   // marcas y proyectos
   var allMarcas=[{marca:b.marca,pro:b.pro,dat:b.dat}].concat(b.extraMarcas||[]);
-  html+='<div class="stitle">Marcas y proyectos</div><div class="card" style="padding:8px 12px">';
+  html+='<div class="stitle">'+tr('marcasProyectos')+'</div><div class="card" style="padding:8px 12px">';
   html+=allMarcas.map(function(m,i){
     return '<div class="frow" style="align-items:flex-start">'
       +'<div><div style="font-size:13px;font-weight:500">'+m.marca+'</div>'
       +(m.pro?'<div style="font-size:11px;color:var(--ink3)">'+m.pro+'</div>':'')
       +(m.dat&&m.dat!=='PENDIENTE'?'<div style="font-size:10px;color:var(--ink3)">'+m.dat+'</div>':'')+'</div>'
-      +(i>0?'<button class="btn btn-danger btn-sm" onclick="removeExtraMarca('+( i-1)+')">✕</button>':'<span style="font-size:10px;color:var(--ink3)">principal</span>')+'</div>';
+      +(i>0?'<button class="btn btn-danger btn-sm" onclick="removeExtraMarca('+( i-1)+')">✕</button>':'<span style="font-size:10px;color:var(--ink3)">'+tr('principal')+'</span>')+'</div>';
   }).join('');
   html+='</div>';
   html+='<div class="card" style="padding:12px 14px">'
-    +'<div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">+ Agregar marca / proyecto</div>'
-    +'<input type="text" id="em-m" placeholder="Marca" style="margin-bottom:6px">'
-    +'<input type="text" id="em-p" placeholder="Proyecto / diseño" style="margin-bottom:6px">'
+    +'<div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">'+tr('agregarMarcaProyecto')+'</div>'
+    +'<input type="text" id="em-m" placeholder="'+tr('marcaPh')+'" style="margin-bottom:6px">'
+    +'<input type="text" id="em-p" placeholder="'+tr('proyectoPh')+'" style="margin-bottom:6px">'
     +'<input type="date" id="em-d" value="'+new Date().toISOString().split('T')[0]+'">'
-    +'<button class="btn btn-outline" onclick="addExtraMarca()" style="margin-top:6px">+ Agregar marca</button></div>';
+    +'<button class="btn btn-outline" onclick="addExtraMarca()" style="margin-top:6px">'+tr('agregarMarca')+'</button></div>';
 
   // artículos
-  html+='<div class="stitle">Artículos del proyecto</div>';
+  html+='<div class="stitle">'+tr('articulosProyecto')+'</div>';
   html+='<div id="det-arts-list">'+renderArtsList(b.arts,true)+'</div>';
-  html+='<button type="button" class="btn-add" onclick="addDetArt()" style="margin-bottom:4px">+ Agregar artículo</button>';
+  html+='<button type="button" class="btn-add" onclick="addDetArt()" style="margin-bottom:4px">'+tr('agregarArticulo')+'</button>';
 
   // plano
-  html+='<div class="stitle">Plano técnico</div>';
+  html+='<div class="stitle">'+tr('planoTecnico')+'</div>';
   if(b.pln){
-    html+='<button class="btn btn-outline" onclick="openFile(\'pln\')">📐 Ver plano PDF</button>';
-    html+='<button class="btn btn-danger" onclick="clrField(\'pln\')" style="margin-top:4px">Eliminar plano</button>';
+    html+='<button class="btn btn-outline" onclick="openFile(\'pln\')">'+tr('verPlanoPdf')+'</button>';
+    html+='<button class="btn btn-outline" onclick="document.getElementById(\'eu-pln-r\').click()" style="margin-top:4px">'+tr('reemplazar')+'</button>';
+    html+='<input type="file" id="eu-pln-r" accept=".pdf,application/pdf" style="display:none" onchange="updFile(this,\'pln\',\'plnN\')">';
+    html+='<button class="btn btn-danger" onclick="clrField(\'pln\')" style="margin-top:4px">'+tr('eliminarPlano')+'</button>';
   } else {
-    html+='<div class="uz" onclick="document.getElementById(\'eu-pln\').click()"><div class="uz-icon">📐</div><div style="font-weight:500">Subir plano PDF</div></div>'
+    html+='<div class="uz" onclick="document.getElementById(\'eu-pln\').click()"><div class="uz-icon">📐</div><div style="font-weight:500">'+tr('subirPlanoPdf')+'</div></div>'
       +'<input type="file" id="eu-pln" accept=".pdf,application/pdf" style="display:none" onchange="updFile(this,\'pln\',\'plnN\')">';
   }
 
   // diseño
-  html+='<div class="stitle">Diseño / Approval sheet</div>';
+  html+='<div class="stitle">'+tr('disenoApproval')+'</div>';
   if(b.des){
     if(b.desImg)html+='<img class="design-img" src="'+b.des+'" loading="lazy">';
-    html+='<button class="btn btn-outline" onclick="openFile(\'des\')" style="margin-top:6px">Abrir '+(b.desImg?'imagen':'PDF')+'</button>';
-    html+='<button class="btn btn-danger" onclick="clrField(\'des\')" style="margin-top:4px">Eliminar diseño</button>';
+    html+='<button class="btn btn-outline" onclick="openFile(\'des\')" style="margin-top:6px">'+(b.desImg?tr('abrirImagen'):tr('abrirPdf'))+'</button>';
+    html+='<button class="btn btn-outline" onclick="document.getElementById(\'eu-des-r\').click()" style="margin-top:4px">'+tr('reemplazar')+'</button>';
+    html+='<input type="file" id="eu-des-r" accept="image/*,application/pdf,.pdf" style="display:none" onchange="updDes(this)">';
+    html+='<button class="btn btn-danger" onclick="clrField(\'des\')" style="margin-top:4px">'+tr('eliminarDiseno')+'</button>';
   } else {
-    html+='<div class="uz" onclick="document.getElementById(\'eu-des\').click()"><div class="uz-icon">🎨</div><div style="font-weight:500">Subir imagen o PDF</div><div style="font-size:10px;margin-top:2px;color:var(--ink3)">También podés pegar con Ctrl+V</div></div>'
+    html+='<div class="uz" onclick="document.getElementById(\'eu-des\').click()"><div class="uz-icon">🎨</div><div style="font-weight:500">'+tr('subirImagenPdf')+'</div><div style="font-size:10px;margin-top:2px;color:var(--ink3)">'+tr('pegarCtrlV')+'</div></div>'
       +'<input type="file" id="eu-des" accept="image/*,application/pdf,.pdf" style="display:none" onchange="updDes(this)">';
   }
 
   // extras
-  html+='<div class="stitle">Archivos adicionales</div>';
+  html+='<div class="stitle">'+tr('archivosAdicionales')+'</div>';
   html+='<div id="det-extras-list" class="attach-list">'+renderExtrasList(b.extras,true)+'</div>';
   html+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">'
-    +'<button type="button" class="btn-add" onclick="document.getElementById(\'eu-extra-img\').click()">📷 Foto</button>'
-    +'<button type="button" class="btn-add" onclick="document.getElementById(\'eu-extra-pdf\').click()">📎 PDF</button>'
+    +'<button type="button" class="btn-add" onclick="document.getElementById(\'eu-extra-img\').click()">'+tr('foto')+'</button>'
+    +'<button type="button" class="btn-add" onclick="document.getElementById(\'eu-extra-pdf\').click()">'+tr('pdf')+'</button>'
     +'</div>'
     +'<input type="file" id="eu-extra-img" accept="image/*" style="display:none" onchange="addDetExtra(this,\'img\')">'
     +'<input type="file" id="eu-extra-pdf" accept=".pdf,application/pdf" style="display:none" onchange="addDetExtra(this,\'pdf\')">';
 
   html+='<div class="divider"></div>';
-  html+='<button class="btn btn-danger" onclick="delBottle()">Eliminar esta botella</button>';
+  html+='<button class="btn btn-danger" onclick="delBottle()">'+tr('eliminarBotella')+'</button>';
   document.getElementById('det').innerHTML=html;
 }
 
 function renderArtsList(arts,withActions){
-  if(!arts||!arts.length)return '<div style="font-size:12px;color:var(--ink3);padding:4px 0;margin-bottom:6px">Sin artículos registrados.</div>';
+  if(!arts||!arts.length)return '<div style="font-size:12px;color:var(--ink3);padding:4px 0;margin-bottom:6px">'+tr('sinArticulos')+'</div>';
   return arts.map(function(a,i){
     return '<div class="art-block">'
       +'<div class="art-block-title">'
-      +(a.tipo?'<span>'+a.tipo+(a.altPeg?' · '+a.altPeg+'mm':'')+'</span>':'<span style="color:var(--ink3)">Artículo '+(i+1)+'</span>')
+      +(a.tipo?'<span>'+artLabel(a.tipo)+(a.corkType?' · '+corkLabel(a.corkType):'')+(a.altPeg?' · '+a.altPeg+'mm':'')+'</span>':'<span style="color:var(--ink3)">'+(LANG==='en'?'Article ':'Artículo ')+(i+1)+'</span>')
       +(withActions?'<button type="button" class="btn btn-danger btn-sm" onclick="removeDetArt('+i+')" style="padding:3px 8px;font-size:11px">✕</button>':'')
       +'</div>'
       +(withActions?'<div class="art-chip-group">'
-        +ART_TYPES.map(function(t){return '<div class="art-chip'+(a.tipo===t?' on':'')+'" onclick="setDetArtTipo('+i+',\''+t+'\',this)">'+t+'</div>';}).join('')
+        +ART_TYPES_ES.map(function(t){return '<div class="art-chip'+(a.tipo===t?' on':'')+'" onclick="setDetArtTipo('+i+',\''+t+'\',this)">'+artLabel(t)+'</div>';}).join('')
         +'</div>'
-        +'<input type="number" placeholder="Altura pegado (mm)" value="'+(a.altPeg||'')+'" oninput="setDetArtAlt('+i+',this.value)" style="margin-bottom:8px">'
+        +(a.tipo==='Tapones'?(
+          '<div class="art-chip-group">'
+          +CORK_TYPES_ES.map(function(c){return '<div class="art-chip'+(a.corkType===c?' on':'')+'" onclick="setDetArtCork('+i+',\''+c+'\',this)">'+corkLabel(c)+'</div>';}).join('')
+          +'</div>'
+        ):'')
+        +'<input type="number" placeholder="'+tr('alturaPegado')+'" value="'+(a.altPeg||'')+'" oninput="setDetArtAlt('+i+',this.value)" style="margin-bottom:8px">'
         :'')
       +(a.desData
         ?(a.desImg&&withActions?'<img src="'+a.desData+'" style="width:100%;max-height:90px;object-fit:contain;border-radius:4px;margin-bottom:4px;background:var(--cream);border:1px solid var(--cream3)">':'')
-        +'<button type="button" class="btn btn-outline btn-sm" onclick="openDetArtDes('+i+')" style="margin-bottom:4px">Ver diseño</button>'
-        +(withActions?'<button type="button" class="btn-add" style="margin-left:6px" onclick="clearDetArtDes('+i+')">✕ Quitar diseño</button>':'')
-        :(withActions?'<div class="uz" onclick="document.getElementById(\'eu-art-des-'+i+'\').click()" style="padding:10px"><div style="font-size:12px">🎨 Subir diseño</div></div>'
-        +'<input type="file" id="eu-art-des-'+i+'" accept="image/*,application/pdf,.pdf" style="display:none" onchange="upDetArtDes(this,'+i+')">':'Sin diseño adjunto'))
+        +'<button type="button" class="btn btn-outline btn-sm" onclick="openDetArtDes('+i+')" style="margin-bottom:4px">'+tr('verDiseno')+'</button>'
+        +(withActions?'<button type="button" class="btn-add" style="margin-left:6px" onclick="clearDetArtDes('+i+')">'+tr('quitarDiseno')+'</button>':'')
+        :(withActions?'<div class="uz" onclick="document.getElementById(\'eu-art-des-'+i+'\').click()" style="padding:10px"><div style="font-size:12px">'+tr('subirDiseno')+'</div></div>'
+        +'<input type="file" id="eu-art-des-'+i+'" accept="image/*,application/pdf,.pdf" style="display:none" onchange="upDetArtDes(this,'+i+')">':tr('sinDisenoAdj')))
       +'</div>';
   }).join('');
 }
 
 function addDetArt(){
   if(!CUR.arts)CUR.arts=[];
-  CUR.arts.push({tipo:'',altPeg:'',desData:null,desN:null,desImg:false});
+  CUR.arts.push({tipo:'',corkType:'',altPeg:'',desData:null,desN:null,desImg:false});
   document.getElementById('det-arts-list').innerHTML=renderArtsList(CUR.arts,true);
   persist();
 }
 function removeDetArt(i){CUR.arts.splice(i,1);persist();document.getElementById('det-arts-list').innerHTML=renderArtsList(CUR.arts,true);toast('Artículo eliminado');}
-function setDetArtTipo(i,tipo,el){CUR.arts[i].tipo=tipo;el.closest('.art-chip-group').querySelectorAll('.art-chip').forEach(function(c){c.classList.remove('on');});el.classList.add('on');persist();}
+function setDetArtTipo(i,tipo,el){CUR.arts[i].tipo=tipo;el.closest('.art-chip-group').querySelectorAll('.art-chip').forEach(function(c){c.classList.remove('on');});el.classList.add('on');persist();document.getElementById('det-arts-list').innerHTML=renderArtsList(CUR.arts,true);}
+function setDetArtCork(i,cork,el){CUR.arts[i].corkType=cork;el.closest('.art-chip-group').querySelectorAll('.art-chip').forEach(function(c){c.classList.remove('on');});el.classList.add('on');persist();}
 function setDetArtAlt(i,val){CUR.arts[i].altPeg=val;persist();}
 function clearDetArtDes(i){CUR.arts[i].desData=null;CUR.arts[i].desN=null;CUR.arts[i].desImg=false;persist();document.getElementById('det-arts-list').innerHTML=renderArtsList(CUR.arts,true);}
 function openDetArtDes(i){var a=(CUR.arts||[])[i];if(a&&a.desData)openDataUrl(a.desData,a.desImg);}
@@ -933,12 +1160,12 @@ function addExtraMarca(){
 function removeExtraMarca(i){CUR.extraMarcas.splice(i,1);persist();persistUpdate(CUR);renderDet();toast('Eliminado');}
 
 function renderExtrasList(extras,withActions){
-  if(!extras||!extras.length)return '<div style="font-size:12px;color:var(--ink3);padding:4px 0">Sin archivos adicionales.</div>';
+  if(!extras||!extras.length)return '<div style="font-size:12px;color:var(--ink3);padding:4px 0">'+tr('sinArchivosAd')+'</div>';
   return extras.map(function(f,i){
     return '<div class="attach-item">'
       +(f.type==='img'?'<img class="attach-thumb" src="'+f.data+'">':'<div class="attach-icon">📎</div>')
       +'<div style="flex:1;min-width:0"><div class="attach-name">'+f.name+'</div>'+(f.compressed?'<span class="compress-badge">comprimida</span>':'')+'</div>'
-      +(withActions?'<button class="attach-open" onclick="openExtra('+i+')">Abrir</button>':'')
+      +(withActions?'<button class="attach-open" onclick="openExtra('+i+')">'+tr('abrir')+'</button>':'')
       +(withActions?'<button class="attach-del" onclick="removeDetExtra('+i+')">✕</button>':'')
       +'</div>';
   }).join('');
@@ -952,87 +1179,63 @@ function addDetExtra(inp,type){
 }
 function removeDetExtra(i){if(!confirm('¿Eliminar?'))return;CUR.extras.splice(i,1);persist();document.getElementById('det-extras-list').innerHTML=renderExtrasList(CUR.extras,true);}
 
-function confirmDate(){var d=document.getElementById('confirm-date').value;if(!d){toast('Elegí una fecha');return;}CUR.dat=d;persist();renderDet();renderLib();toast('Fecha confirmada ✓');}
+function setDetLoc(el){
+  document.querySelectorAll('#det-lc .chip').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on');
+}
+function toggleDetPend(){
+  var inp=document.getElementById('det-dat');
+  var btn=document.getElementById('btn-det-pend');
+  var nowPend = btn.textContent.trim()!=='Pendiente';
+  if(nowPend){
+    inp.disabled=true;inp.style.opacity='.4';
+    btn.textContent='Pendiente';btn.classList.remove('btn-outline');btn.classList.add('btn-gold');
+  } else {
+    inp.disabled=false;inp.style.opacity='1';
+    if(!inp.value)inp.value=new Date().toISOString().split('T')[0];
+    btn.textContent='Marcar pendiente';btn.classList.remove('btn-gold');btn.classList.add('btn-outline');
+  }
+}
+function saveRecepcion(){
+  var loc=document.querySelector('#det-lc .chip.on');
+  var btn=document.getElementById('btn-det-pend');
+  var isPend=btn.textContent.trim()===tr('pendiente').replace('⏳ ','');
+  var wasPend = CUR.dat==='PENDIENTE';
+  CUR.loc = loc?loc.dataset.v:CUR.loc;
+  if(isPend){
+    CUR.dat='PENDIENTE';
+  } else if(wasPend && !isPend){
+    CUR.dat=new Date().toISOString().split('T')[0];
+  } else {
+    CUR.dat=document.getElementById('det-dat').value;
+  }
+  persist();persistUpdate(CUR);renderDet();renderLib();toast(LANG==='en'?'Receipt updated ✓':'Recepción actualizada ✓');
+}
 function updImg(inp,field){if(!inp.files[0])return;compressImage(inp.files[0],function(data,c){CUR[field]=data;persist();persistUpdate(CUR);renderDet();toast('Foto guardada'+(c?' y comprimida':'')+' ✓');});}
 function updFile(inp,field,nf){if(!inp.files[0])return;var r=new FileReader();r.onload=function(e){CUR[field]=e.target.result;if(nf)CUR[nf]=inp.files[0].name;persist();persistUpdate(CUR);renderDet();toast('Archivo guardado ✓');};r.readAsDataURL(inp.files[0]);}
 function updDes(inp){if(!inp.files[0])return;var file=inp.files[0];var isImg=file.type.startsWith('image/');if(isImg){compressImage(file,function(data,c){CUR.des=data;CUR.desN=file.name;CUR.desImg=true;persist();persistUpdate(CUR);renderDet();toast('Diseño guardado'+(c?' y comprimido':'')+' ✓');});}else{var r=new FileReader();r.onload=function(e){CUR.des=e.target.result;CUR.desN=file.name;CUR.desImg=false;persist();persistUpdate(CUR);renderDet();toast('Diseño guardado ✓');};r.readAsDataURL(file);}}
 function clrField(f){if(!confirm('¿Eliminar este dato?'))return;CUR[f]=null;if(f==='des'){CUR.desN=null;CUR.desImg=false;}if(f==='pln'){CUR.plnN=null;}persist();persistUpdate(CUR);renderDet();toast('Eliminado');}
+function saveTechField(field,val){
+  val=val.trim();
+  if(CUR[field]===val)return;
+  CUR[field]=val;
+  persist();persistUpdate(CUR);
+  renderLib();
+  // refresh hero/library info without full re-render to keep focus context
+  var heroNeeds=['marca','pro','mak','cap','mol','mod'];
+  if(heroNeeds.indexOf(field)>=0){
+    var detEl=document.getElementById('det');
+    var scrollPos=detEl.scrollTop;
+    renderDet();
+    detEl.scrollTop=scrollPos;
+  }
+  toast(LANG==='en'?'Saved ✓':'Guardado ✓');
+}
 function saveNot(){CUR.not=document.getElementById('e-not').value;persist();persistUpdate(CUR);renderLib();toast('Notas guardadas ✓');}
 function openFile(f){var d=f==='pln'?CUR.pln:CUR.des;if(!d)return;openDataUrl(d,f==='des'&&CUR.desImg);}
 function delBottle(){if(!confirm('¿Eliminar esta botella del registro?'))return;var delId=CUR.id;DB=DB.filter(function(b){return b.id!==delId;});CUR=null;persist();persistDelete(delId);upd();go('lib');toast('Botella eliminada');}
-function fillSel(sid){var s=document.getElementById(sid);var cur=s.value;s.innerHTML='<option value="">— Elegir botella —</option>';DB.forEach(function(b){var o=document.createElement('option');o.value=b.id;o.textContent=b.marca+' — '+b.mod+' · '+b.cod;s.appendChild(o);});if(cur)s.value=cur;}
+function fillSel(sid){var s=document.getElementById(sid);var cur=s.value;s.innerHTML='<option value="">'+tr('selectBottle')+'</option>';DB.forEach(function(b){var o=document.createElement('option');o.value=b.id;o.textContent=b.marca+' — '+b.mod+' · '+b.cod;s.appendChild(o);});if(cur)s.value=cur;}
 function goA4(){if(!CUR)return;go('a4');fillSel('a4-sel');document.getElementById('a4-sel').value=CUR.id;renderA4prev();}
-
-/* ETIQUETA */
-function renderLbl(){
-  var id=document.getElementById('lbl-sel').value;var out=document.getElementById('lbl-out');
-  if(!id){out.innerHTML='';return;}
-  var b=DB.find(function(x){return x.id===id;});if(!b){out.innerHTML='';return;}
-  var loc=locL2(b.loc);var isPend=b.dat==='PENDIENTE';
-  var arts=(b.arts||[]).filter(function(a){return a.tipo;});
-  var qrTxt='APHOLOS\n'+b.marca+'\n'+b.mod+'\n'+b.cod+'\n'+b.mak+'\n'+loc+(isPend?' (pend.)':' '+b.dat);
-  out.innerHTML='<div style="font-size:10px;color:var(--ink3);text-align:center;margin-bottom:10px;letter-spacing:.5px;font-weight:600">VISTA PREVIA · 10 × 15 cm</div>'
-    +'<div class="lbl-wrap">'
-    // HERO: marca + diseño protagonic
-    +'<div style="background:var(--ink);color:var(--white);border-radius:6px;padding:10px 12px;margin-bottom:8px">'
-    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">'
-    +'<div style="flex:1;min-width:0">'
-    +'<div style="font-family:\'DM Serif Display\',serif;font-size:19px;font-style:italic;line-height:1.1;word-break:break-word">'+b.marca+'</div>'
-    +(b.pro?'<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--gold2);margin-top:3px;word-break:break-word">'+b.pro+'</div>':'')
-    +'</div>'
-    +'<div id="qr-lbl" style="flex-shrink:0;background:white;border-radius:3px;padding:2px"></div>'
-    +'</div></div>'
-    +(b.bot?'<div style="text-align:center;margin:6px 0"><img src="'+b.bot+'" style="max-height:64px;max-width:100%;object-fit:contain;border-radius:3px"></div>':'')
-    +'<div style="flex:1">'
-    +lrow(t2('modelo'),b.mod)+lrow(t2('codigo'),b.cod)
-    +lrow(t2('fabricante'),b.mak)
-    +(b.mol?lrow(t2('molde'),b.mol):'')+(b.cuno?lrow(t2('cuno'),b.cuno):'')+(b.cap?lrow(t2('capacidad'),b.cap):'')+(b.fin?lrow(t2('bague'),b.fin):'')
-    +(arts.length?'<div class="lbl-div"></div>'
-      +'<div style="font-size:8px;font-weight:700;color:var(--ink3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px">'+t2('articulos')+'</div>'
-      +arts.map(function(a){
-        return '<div class="lbl-row">'
-          +'<span class="lbl-k">'+a.tipo+'</span>'
-          +'<span class="lbl-v">'+(a.altPeg?TXT.pegado[0]+'/'+TXT.pegado[1]+' '+a.altPeg+'mm':'')+'</span>'
-          +'</div>';
-      }).join(''):'')
-    +'<div class="lbl-div"></div>'
-    +lrow(t2('recepcion'),loc)
-    +'<div class="lbl-row"><span class="lbl-k">'+t2('fecha')+'</span><span class="'+(isPend?'lbl-pend':'lbl-v')+'">'+(isPend?t2('pendiente'):b.dat)+'</span></div>'
-    +'</div>'
-    +'<div style="border-top:1px solid var(--cream3);padding-top:6px;margin-top:4px;text-align:center"><img src="'+LOGO_BLACK_B64+'" style="height:11px;opacity:.55"></div>'
-    +'</div>'
-    +'<button class="btn btn-primary" onclick="prtLbl(\''+b.id+'\')" style="margin-top:12px;max-width:283px;margin-left:auto;margin-right:auto">🖨 Imprimir etiqueta (10 × 15 cm)</button>';
-  setTimeout(function(){var el=document.getElementById('qr-lbl');if(el&&typeof QRCode!=='undefined'){el.innerHTML='';new QRCode(el,{text:qrTxt,width:48,height:48,correctLevel:QRCode.CorrectLevel.M});}},150);
-}
-function lrow(k,v){return '<div class="lbl-row"><span class="lbl-k">'+k+'</span><span class="lbl-v">'+v+'</span></div>';}
-
-function prtLbl(id){
-  var b=DB.find(function(x){return x.id===id;});if(!b)return;
-  var loc=locL2(b.loc);var isPend=b.dat==='PENDIENTE';
-  var arts=(b.arts||[]).filter(function(a){return a.tipo;});
-  var w=window.open('','_blank');
-  w.document.write('<!DOCTYPE html><html><head><title>Etiqueta '+b.cod+'</title><style>@page{size:100mm 150mm;margin:0}*{box-sizing:border-box;margin:0;padding:0}body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:9.5pt;width:100mm;height:150mm;padding:8mm;display:flex;flex-direction:column;color:#0F0E0C}.hero{background:#0F0E0C;color:#fff;border-radius:2mm;padding:3mm 3.5mm;margin-bottom:2.5mm;display:flex;justify-content:space-between;align-items:flex-start;gap:2mm}.marca{font-size:15pt;font-style:italic;font-weight:300;line-height:1.1}.proyecto{font-size:9pt;font-weight:700;letter-spacing:1px;color:#D4AF6E;margin-top:1mm}.qrbox{background:#fff;border-radius:1mm;padding:1mm;flex-shrink:0}.div{height:.3mm;background:#E4E1D9;margin:2mm 0}.r{display:flex;justify-content:space-between;margin-bottom:1.5mm;font-size:8.5pt}.rk{color:#9A958E}.rv{font-weight:600}.pend{color:#B8934A;font-style:italic}.bimg{text-align:center;margin-bottom:2.5mm}.bimg img{max-height:20mm;max-width:55mm;object-fit:contain}.ft{margin-top:auto;padding-top:2.5mm;border-top:.3mm solid #E4E1D9;text-align:center}.ft img{height:3.2mm;opacity:.55}@media print{body{margin:0}}</style></head><body>'
-    +'<div class="hero"><div><div class="marca">'+b.marca+'</div>'+(b.pro?'<div class="proyecto">'+b.pro+'</div>':'')+'</div><div class="qrbox" id="qr-print"></div></div>'
-    +(b.bot?'<div class="bimg"><img src="'+b.bot+'"></div>':'')
-    +'<div class="r"><span class="rk">'+t2('modelo')+'</span><span class="rv">'+b.mod+'</span></div>'
-    +'<div class="r"><span class="rk">'+t2('codigo')+'</span><span class="rv">'+b.cod+'</span></div>'
-    +'<div class="r"><span class="rk">'+t2('fabricante')+'</span><span class="rv">'+b.mak+'</span></div>'
-    +(b.mol?'<div class="r"><span class="rk">'+t2('molde')+'</span><span class="rv">'+b.mol+'</span></div>':'')
-    +(b.cuno?'<div class="r"><span class="rk">'+t2('cuno')+'</span><span class="rv">'+b.cuno+'</span></div>':'')
-    +(b.cap?'<div class="r"><span class="rk">'+t2('capacidad')+'</span><span class="rv">'+b.cap+'</span></div>':'')
-    +(b.fin?'<div class="r"><span class="rk">'+t2('bague')+'</span><span class="rv">'+b.fin+'</span></div>':'')
-    +(arts.length?'<div class="div"></div><div style="font-size:7pt;font-weight:700;color:#9A958E;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1mm">'+t2('articulos')+'</div>'+arts.map(function(a){return '<div class="r"><span class="rk">'+a.tipo+'</span><span class="rv">'+(a.altPeg?TXT.pegado[0]+'/'+TXT.pegado[1]+' '+a.altPeg+'mm':'')+'</span></div>';}).join(''):'')
-    +'<div class="div"></div>'
-    +'<div class="r"><span class="rk">'+t2('recepcion')+'</span><span class="rv">'+loc+'</span></div>'
-    +'<div class="r"><span class="rk">'+t2('fecha')+'</span><span class="'+(isPend?'pend':'rv')+'">'+(isPend?t2('pendiente'):b.dat)+'</span></div>'
-    +'<div class="ft"><img src="'+LOGO_BLACK_B64+'"></div>'
-    +'<script>'
-    +'var _qrTxt='+JSON.stringify(qrTxt)+';'
-    +'function _drawQr(){if(typeof QRCode==="undefined"){setTimeout(_drawQr,80);return;}new QRCode(document.getElementById("qr-print"),{text:_qrTxt,width:64,height:64,correctLevel:QRCode.CorrectLevel.M});setTimeout(function(){window.print();setTimeout(function(){window.close();},800);},250);}'
-    +'_drawQr();'
-    +'<\/script>'
-    +'<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>');
-}
 
 /* FICHA A4 */
 function renderA4prev(){
@@ -1043,7 +1246,7 @@ function renderA4prev(){
   var allMarcas=[{marca:b.marca,pro:b.pro,dat:b.dat}].concat(b.extraMarcas||[]);
   var arts=(b.arts||[]).filter(function(a){return a.tipo;});
   var extras=b.extras||[];
-  out.innerHTML='<div style="font-size:10px;color:var(--ink3);text-align:center;margin-bottom:10px;letter-spacing:.5px;font-weight:600">VISTA PREVIA TECH SHEET</div>'
+  out.innerHTML='<div style="font-size:10px;color:var(--ink3);text-align:center;margin-bottom:10px;letter-spacing:.5px;font-weight:600">'+tr('vistaPreviaTech')+'</div>'
     +'<div class="a4-prev">'
     +'<div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:2px solid var(--ink);margin-bottom:14px">'
     +'<img src="'+LOGO_BLACK_B64+'" style="height:20px">'
@@ -1056,62 +1259,71 @@ function renderA4prev(){
     +'<div style="font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:3px">'+b.mod+'</div>'
     +'<div style="font-size:11px;color:var(--ink3);margin-bottom:12px">'+b.mak+(b.cap?' · '+b.cap:'')+' · '+b.cod+'</div>'
     +((b.bot||b.bom)?'<div class="g2" style="margin-bottom:12px">'
-      +(b.bot?'<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">Botella entera</div><img src="'+b.bot+'" style="width:100%;height:96px;object-fit:cover;border-radius:5px;border:1px solid var(--cream3)"><button class="attach-open" onclick="openDataUrl(this.previousElementSibling.src,true)" style="margin-top:3px;display:block">Abrir foto</button></div>':'')
-      +(b.bom?'<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">Fondo / molde</div><img src="'+b.bom+'" style="width:100%;height:96px;object-fit:cover;border-radius:5px;border:1px solid var(--cream3)"><button class="attach-open" onclick="openDataUrl(this.previousElementSibling.src,true)" style="margin-top:3px;display:block">Abrir foto</button></div>':'')
+      +(b.bot?'<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">'+(LANG==='en'?'Whole bottle':'Botella entera')+'</div><img src="'+b.bot+'" style="width:100%;height:96px;object-fit:cover;border-radius:5px;border:1px solid var(--cream3)"><button class="attach-open" onclick="openDataUrl(this.previousElementSibling.src,true)" style="margin-top:3px;display:block">'+t2('abrir')+'</button></div>':'')
+      +(b.bom?'<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">'+(LANG==='en'?'Bottom / mold':'Fondo / molde')+'</div><img src="'+b.bom+'" style="width:100%;height:96px;object-fit:cover;border-radius:5px;border:1px solid var(--cream3)"><button class="attach-open" onclick="openDataUrl(this.previousElementSibling.src,true)" style="margin-top:3px;display:block">'+t2('abrir')+'</button></div>':'')
       +'</div>':'')
     +'<div style="background:var(--cream);border-radius:8px;padding:11px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">'
     +[[t2('fabricante'),b.mak],[t2('codigo'),b.cod],[t2('molde'),b.mol||'—'],[t2('cuno'),b.cuno||'—'],[t2('capacidad'),b.cap||'—'],[t2('bague'),b.fin||'—'],[t2('recepcion'),loc]].map(function(r){return '<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:2px">'+r[0]+'</div><div style="font-size:12px;font-weight:500">'+r[1]+'</div></div>';}).join('')
     +'</div>'
     +(allMarcas.length?'<div style="font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:7px">'+TXT.clientesProy[0]+' / '+TXT.clientesProy[1]+'</div>'
       +'<div style="margin-bottom:12px">'+allMarcas.map(function(m){return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--cream2);font-size:12px"><span style="font-weight:500">'+m.marca+'</span><span style="color:var(--ink3)">'+(m.pro||'—')+'</span></div>';}).join('')+'</div>':'')
-    +(arts.length?'<div style="font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:7px">'+t2('articulos')+' / Project</div>'
-      +'<div style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:5px">'+arts.map(function(a,ai){return '<div style="background:var(--cream2);border:1px solid var(--cream3);border-radius:6px;padding:5px 10px;font-size:11px"><div style="font-weight:600">'+a.tipo+'</div>'+(a.altPeg?'<div style="font-size:10px;color:var(--ink3)">'+TXT.pegado[0]+'/'+TXT.pegado[1]+': '+a.altPeg+'mm</div>':'')+(a.desData?'<button class="attach-open" onclick="openExtraA4Art(\''+b.id+'\','+ai+')">Ver diseño</button>':'')+'</div>';}).join('')+'</div>':'')
-    +(b.des?'<div style="font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:7px">'+TXT.disenoTitle[0]+' / '+TXT.disenoTitle[1]+'</div>'+(b.desImg?'<img src="'+b.des+'" style="width:100%;max-height:190px;object-fit:contain;border-radius:5px;border:1px solid var(--cream3);background:var(--cream);margin-bottom:6px">':'')+'<button class="attach-open" onclick="var _b=DB.find(function(x){return x.id===\''+b.id+'\';});openDataUrl(_b.des,_b.desImg)" style="display:block;margin-bottom:10px">Abrir '+(b.desImg?'imagen':'PDF')+'</button>':'')
+    +(arts.length?'<div style="font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:7px">'+t2('articulosProyecto2')+'</div>'
+      +'<div style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:5px">'+arts.map(function(a,ai){return '<div style="background:var(--cream2);border:1px solid var(--cream3);border-radius:6px;padding:5px 10px;font-size:11px"><div style="font-weight:600">'+artLabel2(a.tipo)+(a.corkType?' · '+corkLabel2(a.corkType):'')+'</div>'+(a.altPeg?'<div style="font-size:10px;color:var(--ink3)">'+TXT.pegado[0]+'/'+TXT.pegado[1]+': '+a.altPeg+'mm</div>':'')+(a.desData?'<button class="attach-open" onclick="openExtraA4Art(\''+b.id+'\','+ai+')">'+t2('verDiseno2')+'</button>':'')+'</div>';}).join('')+'</div>':'')
+    +(b.des?'<div style="font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:7px">'+TXT.disenoTitle[0]+' / '+TXT.disenoTitle[1]+'</div>'+(b.desImg?'<img src="'+b.des+'" style="width:100%;max-height:190px;object-fit:contain;border-radius:5px;border:1px solid var(--cream3);background:var(--cream);margin-bottom:6px">':'')+'<button class="attach-open" onclick="var _b=DB.find(function(x){return x.id===\''+b.id+'\';});openDataUrl(_b.des,_b.desImg)" style="display:block;margin-bottom:10px">'+(b.desImg?t2('abrirImagen'):t2('abrirPdf'))+'</button>':'')
     +(b.pln?'<div style="background:#E8F0FB;padding:7px 11px;border-radius:6px;font-size:11px;color:#1A4A8A;font-weight:500;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">'
       +'<span>📐 '+TXT.planoTitle[0]+'/'+TXT.planoTitle[1]+' — '+(b.plnN||'plano.pdf')+'</span>'
-      +'<button class="attach-open" onclick="openDataUrl(DB.find(function(x){return x.id===\''+b.id+'\';}).pln,false)">Abrir</button></div>':'')
+      +'<button class="attach-open" onclick="openDataUrl(DB.find(function(x){return x.id===\''+b.id+'\';}).pln,false)">'+t2('abrir')+'</button></div>':'')
     +(extras.length?'<div style="font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:7px">'+TXT.archivosAd[0]+' / '+TXT.archivosAd[1]+'</div>'
       +'<div class="attach-list" style="margin-bottom:12px">'+extras.map(function(f,i){
         return '<div class="attach-item">'
           +(f.type==='img'?'<img class="attach-thumb" src="'+f.data+'">'
             :'<div class="attach-icon">📎</div>')
           +'<div style="flex:1;min-width:0"><div class="attach-name">'+f.name+'</div></div>'
-          +'<button class="attach-open" onclick="openExtraA4(\''+b.id+'\','+i+')">Abrir</button>'
+          +'<button class="attach-open" onclick="openExtraA4(\''+b.id+'\','+i+')">'+t2('abrir')+'</button>'
           +'</div>';
       }).join('')+'</div>':'')
     +(b.not?'<div style="border-left:3px solid var(--gold);padding:8px 11px;background:var(--cream);border-radius:0 5px 5px 0"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:var(--gold);margin-bottom:3px">'+TXT.notasTitle[0]+' / '+TXT.notasTitle[1]+'</div><div style="font-size:12px;color:var(--ink2)">'+b.not+'</div></div>':'')
     +'</div>'
-    +'<button class="btn btn-primary" onclick="prtA4(\''+b.id+'\')" style="margin-top:12px">🖨 Imprimir / Guardar como PDF</button>';
+    +'<button class="btn btn-primary" onclick="prtA4Small(\''+b.id+'\')" style="margin-top:12px">'+tr('imprimir10x15')+'</button>';
 }
 
 function openExtraA4(bid,i){var b=DB.find(function(x){return x.id===bid;});if(!b)return;var f=(b.extras||[])[i];if(f)openDataUrl(f.data,f.type==='img');}
 
-function prtA4(id){
+
+function prtA4Small(id){
   var b=DB.find(function(x){return x.id===id;});if(!b)return;
-  var loc=locL(b.loc);var isPend=b.dat==='PENDIENTE';
-  var allMarcas=[{marca:b.marca,pro:b.pro,dat:b.dat}].concat(b.extraMarcas||[]);
-  var arts=(b.arts||[]).filter(function(a){return a.tipo;});
-  var extras=b.extras||[];
+  var src=document.querySelector('#a4-out .a4-prev');
+  if(!src){toast(LANG==='en'?'Generate the preview first':'Generá la vista previa primero');return;}
+  var clone=src.cloneNode(true);
+  // remove interactive buttons (Abrir/View/Print etc.)
+  clone.querySelectorAll('button,.attach-open').forEach(function(el){el.remove();});
   var w=window.open('','_blank');
-  w.document.write('<!DOCTYPE html><html><head><title>Tech Sheet '+b.cod+'</title><style>@page{size:A4 portrait;margin:18mm 15mm}*{box-sizing:border-box;margin:0;padding:0}body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:10pt;color:#0F0E0C}.hdr{display:flex;justify-content:space-between;align-items:center;padding-bottom:8pt;border-bottom:1.5pt solid #0F0E0C;margin-bottom:12pt}.logo{height:18pt}.hero{background:#0F0E0C;color:#fff;border-radius:6pt;padding:12pt 14pt;margin-bottom:10pt}.marca{font-size:22pt;font-style:italic;font-weight:300;line-height:1.1}.proyecto-pill{display:inline-block;font-size:9pt;font-weight:700;letter-spacing:1px;color:#D4AF6E;background:rgba(184,147,74,.15);border:.5pt solid rgba(184,147,74,.3);border-radius:10pt;padding:3pt 9pt;margin-top:4pt}.mod{font-size:11pt;font-weight:600;color:#5A5751;margin-bottom:2pt}.msub{font-size:9pt;color:#9A958E;margin-bottom:10pt}.photos{display:grid;grid-template-columns:1fr 1fr;gap:7pt;margin-bottom:10pt}.photos img{width:100%;height:78pt;object-fit:cover;border-radius:3pt;border:.5pt solid #E4E1D9}.plbl{font-size:7pt;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#9A958E;margin-bottom:3pt}.dg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6pt;background:#F7F5F0;padding:9pt;border-radius:4pt;margin-bottom:10pt}.dk{font-size:7pt;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#9A958E;display:block;margin-bottom:1pt}.dv{font-size:10pt;font-weight:600}.slbl{font-size:7pt;font-weight:700;color:#9A958E;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5pt;margin-top:9pt}.cr{display:flex;justify-content:space-between;padding:3pt 0;border-bottom:.5pt solid #EFEDE7;font-size:9.5pt}.arts{display:flex;flex-wrap:wrap;gap:5pt;margin-bottom:10pt}.art-box{background:#F7F5F0;border-radius:3pt;padding:5pt 8pt;font-size:9pt}.art-tipo{font-weight:700}.art-alt{font-size:8pt;color:#9A958E}.dimg{width:100%;max-height:150pt;object-fit:contain;border-radius:3pt;border:.5pt solid #E4E1D9;background:#F7F5F0;margin:3pt 0 9pt}.nbox{border-left:2pt solid #B8934A;padding:7pt 10pt;background:#F7F5F0;border-radius:0 3pt 3pt 0}.nbox-lbl{font-size:7pt;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#B8934A;margin-bottom:2pt}.pbox{background:#E8F0FB;padding:6pt 9pt;border-radius:4pt;font-size:9pt;color:#1A4A8A;font-weight:500;margin-bottom:6pt}.extbox{display:flex;align-items:center;gap:6pt;padding:4pt 7pt;background:#F7F5F0;border-radius:3pt;margin-bottom:3pt;font-size:8.5pt}.ext-thumb{width:26pt;height:26pt;object-fit:cover;border-radius:2pt}.pend{color:#B8934A;font-style:italic}.ft{position:fixed;bottom:8mm;left:0;right:0;padding:3pt 15mm 0;display:flex;justify-content:space-between;align-items:center;font-size:7pt;color:#9A958E;border-top:.3pt solid #E4E1D9}</style></head><body>'
-    +'<div class="hdr"><img class="logo" src="'+LOGO_BLACK_B64+'">'
-    +'<div style="text-align:right;font-size:8.5pt;color:#9A958E"><div style="font-weight:700;font-size:10pt;color:'+(isPend?'#B8934A':'#0F0E0C')+'">'+(isPend?'⏳ Pendiente':b.dat)+'</div><div>'+loc+'</div></div></div>'
-    +'<div class="hero">'
-    +'<div class="marca">'+b.marca+'</div>'
-    +(b.pro?'<div class="proyecto-pill">'+b.pro+'</div>':'')
-    +'</div>'
-    +'<div class="mod">'+b.mod+'</div>'
-    +'<div class="msub">'+b.mak+(b.cap?' · '+b.cap:'')+' · '+b.cod+'</div>'
-    +((b.bot||b.bom)?'<div class="photos">'+(b.bot?'<div><div class="plbl">Botella entera</div><img src="'+b.bot+'"></div>':'')+(b.bom?'<div><div class="plbl">Fondo / molde</div><img src="'+b.bom+'"></div>':'')+'</div>':'')
-    +'<div class="dg"><div><span class="dk">Fabricante</span><span class="dv">'+b.mak+'</span></div><div><span class="dk">Código</span><span class="dv">'+b.cod+'</span></div><div><span class="dk">Molde</span><span class="dv">'+(b.mol||'—')+'</span></div><div><span class="dk">Cuño</span><span class="dv">'+(b.cuno||'—')+'</span></div><div><span class="dk">Capacidad</span><span class="dv">'+(b.cap||'—')+'</span></div><div><span class="dk">Bague</span><span class="dv">'+(b.fin||'—')+'</span></div><div><span class="dk">Recepción</span><span class="dv">'+loc+'</span></div></div>'
-    +(allMarcas.length?'<div class="slbl">'+TXT.clientesProy[0]+' / '+TXT.clientesProy[1]+'</div>'+allMarcas.map(function(m){return '<div class="cr"><span style="font-weight:600">'+m.marca+'</span><span style="color:#9A958E">'+(m.pro||'—')+'</span><span style="color:#C5C1BA;font-size:8pt">'+(m.dat&&m.dat!=='PENDIENTE'?m.dat:'')+'</span></div>';}).join(''):'')
-    +(arts.length?'<div class="slbl">Artículos del proyecto</div><div class="arts">'+arts.map(function(a){return '<div class="art-box"><div class="art-tipo">'+a.tipo+'</div>'+(a.altPeg?'<div class="art-alt">Pegado: '+a.altPeg+'mm</div>':'')+'</div>';}).join('')+'</div>':'')
-    +(b.des&&b.desImg?'<div class="slbl">Diseño / Approval sheet</div><img class="dimg" src="'+b.des+'">':'')
-    +(b.pln?'<div class="pbox">📐 Plano técnico — '+(b.plnN||'plano.pdf')+'</div>':'')
-    +(extras.length?'<div class="slbl">Archivos adicionales</div>'+extras.map(function(f){return '<div class="extbox">'+(f.type==='img'?'<img class="ext-thumb" src="'+f.data+'">':'<span style="font-size:14pt">📎</span>')+'<span>'+f.name+'</span></div>';}).join(''):'')
-    +(b.not?'<div class="slbl">'+TXT.notasTitle[0]+' / '+TXT.notasTitle[1]+'</div><div class="nbox"><div class="nbox-lbl">Notas/Notes</div><div style="font-size:9.5pt;color:#5A5751">'+b.not+'</div></div>':'')
-    +'<div class="ft"><img src="'+LOGO_BLACK_B64+'" style="height:9pt;opacity:.5"><span>'+b.cod+' · '+b.marca+'</span><span>'+new Date().toLocaleDateString('es-AR')+'</span></div>'
-    +'<script>window.onload=function(){window.print();setTimeout(function(){window.close();},700);}<\/script></body></html>');
+  var html='<!DOCTYPE html><html><head><title>'+b.cod+'</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"><style>'
+    +':root{--ink:#0F0E0C;--ink2:#5A5751;--ink3:#9A958E;--cream:#F7F5F0;--cream2:#EFEDE7;--cream3:#E4E1D9;--gold:#B8934A;--gold2:#D4AF6E;--gold3:#F0DEB4;--white:#FFFFFF;--danger:#8B2E2E;--success:#2E6B4A;--r:10px;--rs:6px;}'
+    +'@page{size:100mm 150mm;margin:0}'
+    +'*{box-sizing:border-box}'
+    +'html,body{margin:0;padding:0;width:100mm;height:150mm;overflow:hidden}'
+    +'body{font-family:\'Inter\',Arial,sans-serif}'
+    +'.scale-wrap{width:100mm;height:150mm;overflow:hidden;display:flex;align-items:flex-start;justify-content:center}'
+    +'.a4-prev{transform-origin:top center;padding:14px !important;border:none !important}'
+    +'@media print{*{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;color-adjust:exact !important}}'
+    +'</style></head><body>'
+    +'<div class="scale-wrap"><div class="a4-prev">'+clone.innerHTML+'</div></div>'
+    +'<script>'
+    +'window.onload=function(){'
+    +'var el=document.querySelector(".a4-prev");'
+    +'var pageH=150*96/25.4;'
+    +'var pageW=100*96/25.4;'
+    +'var rect=el.getBoundingClientRect();'
+    +'var scale=Math.min(pageW/rect.width, pageH/rect.height);'
+    +'el.style.transform="scale("+scale+")";'
+    +'el.style.width=rect.width+"px";'
+    +'setTimeout(function(){window.print();setTimeout(function(){window.close();},800);},150);'
+    +'};'
+    +'<\\/script>'
+    +'</body></html>';
+  w.document.write(html);
+  w.document.close();
 }
 
 function openExtraA4Art(bid,ai){
