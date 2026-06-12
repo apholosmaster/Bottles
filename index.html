@@ -1398,11 +1398,14 @@ function renderA4prev(){
     +'<div class="a4-prev">'
     +'<div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:2px solid var(--ink);margin-bottom:14px">'
     +'<img src="'+LOGO_BLACK_B64+'" style="height:20px">'
-    +'<div style="text-align:right"><div style="font-size:12px;font-weight:600;color:'+(isPend?'var(--gold)':'var(--ink)')+'">'+(isPend?t2('pendiente'):b.dat)+'</div><div style="font-size:10px;color:var(--ink3)">'+loc+'</div></div></div>'
+    +'<div style="text-align:right;font-size:10px;color:var(--ink3)">'+(isPend?'<span style="color:var(--gold);font-weight:600">'+t2('pendiente')+'</span>':b.dat)+'</div></div>'
     // HERO marca + diseño
     +'<div style="background:var(--ink);color:var(--white);border-radius:10px;padding:16px 18px;margin-bottom:14px">'
-    +'<div style="font-family:\'DM Serif Display\',serif;font-size:28px;font-style:italic;line-height:1.1;margin-bottom:4px">'+b.marca+'</div>'
-    +(b.pro?'<div style="display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--gold2);background:rgba(184,147,74,.15);border:1px solid rgba(184,147,74,.3);border-radius:20px;padding:4px 12px;margin-top:4px">'+b.pro+'</div>':'')
+    +'<div style="font-family:\'DM Serif Display\',serif;font-size:28px;font-style:italic;line-height:1.1;margin-bottom:8px">'+b.marca+'</div>'
+    +((b.pro||b.cuno)?'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+      +(b.pro?'<div style="font-size:11px;color:var(--white)"><span style="font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.6">'+(LANG==='en'?'Design number':'Número de diseño')+': </span><span style="font-weight:700">'+b.pro+'</span></div>':'')
+      +(b.cuno?'<div style="font-size:11px;color:var(--white)"><span style="font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.6">'+(LANG==='en'?'Mold / stamp number':'Número de molde/cuño')+': </span><span style="font-weight:700">'+b.cuno+'</span></div>':'')
+      +'</div>':'')
     +'</div>'
     +'<div style="font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:3px">'+b.mod+'</div>'
     +'<div style="font-size:11px;color:var(--ink3);margin-bottom:12px">'+b.mak+(b.cap?' · '+b.cap:'')+' · '+b.cod+'</div>'
@@ -1411,7 +1414,7 @@ function renderA4prev(){
       +(b.bom?'<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">'+(LANG==='en'?'Bottom / mold':'Fondo / molde')+'</div><img src="'+b.bom+'" style="width:100%;height:140px;object-fit:cover;border-radius:5px;border:1px solid var(--cream3)"><button class="attach-open" onclick="openDataUrl(this.previousElementSibling.src,true)" style="margin-top:3px;display:block">'+t2('abrir')+'</button></div>':'')
       +'</div>':'')
     +'<div style="background:var(--cream);border-radius:8px;padding:11px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">'
-    +[[t2('fabricante'),b.mak],[t2('codigo'),b.cod],[t2('molde'),b.mol||'—'],[t2('cuno'),b.cuno||'—'],[t2('capacidad'),b.cap||'—'],[t2('bague'),b.fin||'—'],[t2('recepcion'),loc]].map(function(r){return '<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:2px">'+r[0]+'</div><div style="font-size:12px;font-weight:500">'+r[1]+'</div></div>';}).join('')
+    +[[t2('fabricante'),b.mak],[t2('codigo'),b.cod],[t2('molde'),b.mol||'—'],[t2('capacidad'),b.cap||'—'],[t2('bague'),b.fin||'—'],[t2('recepcion'),isPend?('<span style="color:var(--gold)">'+t2('pendiente')+'</span>'):loc]].map(function(r){return '<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:2px">'+r[0]+'</div><div style="font-size:12px;font-weight:500">'+r[1]+'</div></div>';}).join('')
     +'</div>'
     +(allMarcas.length?'<div style="font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:7px">'+TXT.clientesProy[0]+' / '+TXT.clientesProy[1]+'</div>'
       +'<div style="margin-bottom:12px">'+allMarcas.map(function(m){return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--cream2);font-size:12px"><span style="font-weight:500">'+m.marca+'</span><span style="color:var(--ink3)">'+(m.pro||'—')+'</span></div>';}).join('')+'</div>':'')
@@ -1459,30 +1462,18 @@ function prtA4Small(id){
   var w=window.open('','_blank');
   var html='<!DOCTYPE html><html><head><title>'+b.cod+'</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"><style>'
     +':root{--ink:#0F0E0C;--ink2:#5A5751;--ink3:#9A958E;--cream:#F7F5F0;--cream2:#EFEDE7;--cream3:#E4E1D9;--gold:#B8934A;--gold2:#D4AF6E;--gold3:#F0DEB4;--white:#FFFFFF;--danger:#8B2E2E;--success:#2E6B4A;--r:10px;--rs:6px;}'
-    +'@page{size:100mm 150mm;margin:0}'
+    +'@page{size:100mm 150mm;margin:5mm}'
     +'*{box-sizing:border-box}'
-    +'html,body{margin:0;padding:0;width:100mm;height:150mm;overflow:hidden}'
+    +'html,body{margin:0;padding:0;width:100mm}'
     +'body{font-family:\'Inter\',Arial,sans-serif}'
-    +'.scale-wrap{position:relative;width:100mm;height:150mm;overflow:hidden}'
-    +'.a4-prev{position:absolute;top:0;left:0;transform-origin:top left;padding:14px !important;border:none !important;box-sizing:border-box}'
+    +'.a4-prev{width:100% !important;padding:0 !important;border:none !important;box-sizing:border-box}'
     +'.a4-prev img{max-width:100%}'
-    +'.photos img,.extbox img,.ext-thumb{max-height:160px !important}'
+    +'.a4-prev > div{page-break-inside:avoid;break-inside:avoid;}'
     +'@media print{*{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;color-adjust:exact !important}}'
     +'</style></head><body>'
-    +'<div class="scale-wrap"><div class="a4-prev">'+clone.innerHTML+'</div></div>'
+    +'<div class="a4-prev">'+clone.innerHTML+'</div>'
     +'<script>'
     +'window.onload=function(){'
-    +'var el=document.querySelector(".a4-prev");'
-    +'var pageH=150*96/25.4;'
-    +'var pageW=100*96/25.4;'
-    +'var rect=el.getBoundingClientRect();'
-    +'var scale=Math.min(pageW/rect.width, pageH/rect.height);'
-    +'el.style.width=rect.width+"px";'
-    +'el.style.transform="scale("+scale+")";'
-    +'var sw=document.querySelector(".scale-wrap");'
-    +'sw.style.width=(rect.width*scale)+"px";'
-    +'sw.style.height=(rect.height*scale)+"px";'
-    +'sw.style.margin="0 auto";'
     +'setTimeout(function(){window.print();setTimeout(function(){window.close();},800);},150);'
     +'};'
     +'<\\/script>'
