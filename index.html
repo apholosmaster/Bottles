@@ -501,7 +501,8 @@ var UI = {
   imprimirTech:['🖨 Imprimir / Guardar como PDF','🖨 Print / Save as PDF'],
   vistaPrevia:['VISTA PREVIA','PREVIEW'],
   vistaPreviaTech:['VISTA PREVIA TECH SHEET','TECH SHEET PREVIEW'],
-  imprimir10x15:['🖨 Imprimir esta ficha (10 × 15 cm)','🖨 Print this sheet (10 × 15 cm)']
+  imprimir10x15:['🖨 Imprimir esta ficha (10 × 15 cm)','🖨 Print this sheet (10 × 15 cm)'],
+  editarRegistro:['✏️ Editar registro completo','✏️ Edit full record']
 };
 function tr(key){var e=UI[key];if(!e)return key;return LANG==='en'?e[1]:e[0];}
 function trN(key,n){return tr(key).replace('%n',n);}
@@ -583,15 +584,17 @@ function showSyncStatus(msg, type){
 }
 
 function loadFromGoogle(){
+  var tombstones=[];
+  try{tombstones=JSON.parse(localStorage.getItem('apholos_deleted')||'[]');}catch(e){}
   fetch(SCRIPT_URL+'?action=getAll')
     .then(function(r){return r.json();})
     .then(function(data){
       if(data.bottles && data.bottles.length){
-        // MERGE: combine local + remote by id, never lose local-only bottles
+        // MERGE: combine local + remote by id, never lose local-only bottles, skip tombstoned ids
         var byId = {};
         DB.forEach(function(b){byId[b.id]=b;});
         data.bottles.forEach(function(rb){
-          // remote wins only if it has same or newer data; otherwise keep local
+          if(tombstones.indexOf(rb.id)>=0)return; // locally deleted, don't resurrect
           if(!byId[rb.id]) byId[rb.id]=rb;
         });
         var merged = Object.keys(byId).map(function(k){return byId[k];});
@@ -700,7 +703,11 @@ function persistSave(bottle){
 function persistDelete(id){
   try{localStorage.setItem('apholos_v5',JSON.stringify(DB));}catch(e){}
   if(!ONLINE)return;
-  fetch(SCRIPT_URL+'?action=delete&id='+encodeURIComponent(id)).catch(function(){});
+  showSyncStatus(LANG==='en'?'Deleting from Google...':'Eliminando de Google...','loading');
+  fetch(SCRIPT_URL+'?action=delete&id='+encodeURIComponent(id))
+    .then(function(r){return r.json();})
+    .then(function(d){showSyncStatus(d.ok?(LANG==='en'?'Deleted ✓':'Eliminado ✓'):(LANG==='en'?'Delete error':'Error al eliminar'),'ok');})
+    .catch(function(){showSyncStatus(LANG==='en'?'Connection error':'Error de conexión','err');});
 }
 function upd(){
   document.getElementById('cnt').textContent=DB.length+' '+(DB.length===1?tr('botella'):tr('botellas'));
@@ -908,16 +915,73 @@ function removeRegExtra(i){FD.extras.splice(i,1);renderRegExtras();}
 
 function v(id){return document.getElementById(id).value.trim();}
 
+var EDIT_ID=null;
 function save(){
   var cod=v('r-cod'),mod=v('r-mod'),mak=v('r-mak'),marca=v('r-marca');
   var loc=getChip('lc');
   if(!cod||!mod||!mak||!marca){toast(tr('completarCampos'));return;}
   if(!loc){toast(tr('elegirRecepcion'));return;}
+  if(EDIT_ID){
+    var existing=DB.find(function(x){return x.id===EDIT_ID;});
+    if(existing){
+      existing.cod=cod;existing.mod=mod;existing.mak=mak;existing.marca=marca;
+      existing.mol=v('r-mol');existing.cuno=v('r-cuno');existing.cap=v('r-cap');existing.fin=v('r-fin');
+      existing.not=v('r-not');existing.pro=v('r-pro');existing.molD=v('r-molD');existing.loc=loc;
+      if(existing.loc==='PEND' && !existing.dat) existing.dat=new Date().toISOString().split('T')[0];
+      existing.bot=FD.bot!==null?FD.bot:existing.bot;
+      existing.bom=FD.bom!==null?FD.bom:existing.bom;
+      existing.prodImg=FD.prodImg!==null?FD.prodImg:existing.prodImg;
+      existing.pln=FD.pln!==null?FD.pln:existing.pln;
+      existing.plnN=FD.plnN!==null?FD.plnN:existing.plnN;
+      existing.des=FD.des!==null?FD.des:existing.des;
+      existing.desN=FD.desN!==null?FD.desN:existing.desN;
+      existing.desImg=FD.des!==null?FD.desImg:existing.desImg;
+      existing.extras=FD.extras.length?FD.extras.slice():existing.extras;
+      existing.arts=FD.arts.slice();
+      persist();persistUpdate(existing);upd();
+      toast(LANG==='en'?'Bottle updated ✓':'Botella actualizada ✓');
+      clearF();EDIT_ID=null;go('lib');
+      return;
+    }
+  }
   var dat=new Date().toISOString().split('T')[0];
   var b={id:Date.now().toString(),cod:cod,mod:mod,mak:mak,marca:marca,mol:v('r-mol'),cuno:v('r-cuno'),cap:v('r-cap'),fin:v('r-fin'),not:v('r-not'),pro:v('r-pro'),molD:v('r-molD'),loc:loc,dat:dat,
     bot:FD.bot,bom:FD.bom,prodImg:FD.prodImg,pln:FD.pln,plnN:FD.plnN,des:FD.des,desN:FD.desN,desImg:FD.desImg,
     extras:FD.extras.slice(),arts:FD.arts.slice(),extraMarcas:[]};
   DB.unshift(b);persist();persistSave(b);upd();toast(LANG==='en'?'Bottle saved ✓':'Botella guardada ✓');clearF();go('lib');
+}
+
+function editFromA4(id){
+  var b=DB.find(function(x){return x.id===id;});if(!b)return;
+  clearF();
+  EDIT_ID=id;
+  document.getElementById('r-marca').value=b.marca||'';
+  document.getElementById('r-pro').value=b.pro||'';
+  document.getElementById('r-molD').value=b.molD||'';
+  document.getElementById('r-cod').value=b.cod||'';
+  document.getElementById('r-mod').value=b.mod||'';
+  document.getElementById('r-mak').value=b.mak||'';
+  document.getElementById('r-mol').value=b.mol||'';
+  document.getElementById('r-cuno').value=b.cuno||'';
+  document.getElementById('r-cap').value=b.cap||'';
+  document.getElementById('r-fin').value=b.fin||'';
+  document.getElementById('r-not').value=b.not||'';
+  // manufacturer chip
+  document.querySelectorAll('#mak-chips .chip').forEach(function(c){c.classList.toggle('on',c.dataset.v===b.mak);});
+  // location chip
+  document.querySelectorAll('#lc .chip').forEach(function(c){c.classList.toggle('on',c.dataset.v===b.loc);});
+  // articles
+  FD.arts=(b.arts||[]).map(function(a,i){return Object.assign({},a,{id:'ra-edit-'+i});});
+  regArtCount=FD.arts.length;
+  renderRegArts();
+  // file previews (keep null = unchanged, show existing state visually)
+  if(b.bot){setZone('z-bot',tr('fotoBotella'));document.getElementById('p-bot').src=b.bot;document.getElementById('p-bot').style.display='block';}
+  if(b.bom){setZone('z-bom',tr('fondo'));document.getElementById('p-bom').src=b.bom;document.getElementById('p-bom').style.display='block';}
+  if(b.prodImg){setZone('z-prod',tr('fotoProducto'));document.getElementById('p-prod').src=b.prodImg;document.getElementById('p-prod').style.display='block';}
+  if(b.pln){setZone('z-pln',b.plnN||tr('planoTecnico'));}
+  if(b.des){setZone('z-des',b.desN||tr('disenoPrincipal'));if(b.desImg){document.getElementById('p-des').src=b.des;document.getElementById('p-des').style.display='block';}}
+  go('reg');
+  toast(LANG==='en'?'Editing — file fields left empty stay unchanged':'Editando — los campos de archivo vacíos no se modifican');
 }
 
 function clearF(){
@@ -1306,7 +1370,18 @@ function saveTechField(field,val){
 }
 function saveNot(){CUR.not=document.getElementById('e-not').value;persist();persistUpdate(CUR);renderLib();toast('Notas guardadas ✓');}
 function openFile(f){var d=f==='pln'?CUR.pln:CUR.des;if(!d)return;openDataUrl(d,f==='des'&&CUR.desImg);}
-function delBottle(){if(!confirm('¿Eliminar esta botella del registro?'))return;var delId=CUR.id;DB=DB.filter(function(b){return b.id!==delId;});CUR=null;persist();persistDelete(delId);upd();go('lib');toast('Botella eliminada');}
+function delBottle(){
+  if(!confirm(LANG==='en'?'Delete this bottle from the registry?':'¿Eliminar esta botella del registro?'))return;
+  var delId=CUR.id;
+  DB=DB.filter(function(b){return b.id!==delId;});
+  CUR=null;
+  try{
+    var tomb=JSON.parse(localStorage.getItem('apholos_deleted')||'[]');
+    if(tomb.indexOf(delId)<0)tomb.push(delId);
+    localStorage.setItem('apholos_deleted',JSON.stringify(tomb));
+  }catch(e){}
+  persist();persistDelete(delId);upd();go('lib');toast(LANG==='en'?'Bottle deleted':'Botella eliminada');
+}
 function fillSel(sid){var s=document.getElementById(sid);var cur=s.value;s.innerHTML='<option value="">'+tr('selectBottle')+'</option>';DB.forEach(function(b){var o=document.createElement('option');o.value=b.id;o.textContent=b.marca+' — '+b.mod+' · '+b.cod;s.appendChild(o);});if(cur)s.value=cur;}
 function goA4(){if(!CUR)return;go('a4');fillSel('a4-sel');document.getElementById('a4-sel').value=CUR.id;renderA4prev();}
 
@@ -1332,8 +1407,8 @@ function renderA4prev(){
     +'<div style="font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:3px">'+b.mod+'</div>'
     +'<div style="font-size:11px;color:var(--ink3);margin-bottom:12px">'+b.mak+(b.cap?' · '+b.cap:'')+' · '+b.cod+'</div>'
     +((b.bot||b.bom)?'<div class="g2" style="margin-bottom:12px">'
-      +(b.bot?'<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">'+(LANG==='en'?'Whole bottle':'Botella entera')+'</div><img src="'+b.bot+'" style="width:100%;height:96px;object-fit:cover;border-radius:5px;border:1px solid var(--cream3)"><button class="attach-open" onclick="openDataUrl(this.previousElementSibling.src,true)" style="margin-top:3px;display:block">'+t2('abrir')+'</button></div>':'')
-      +(b.bom?'<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">'+(LANG==='en'?'Bottom / mold':'Fondo / molde')+'</div><img src="'+b.bom+'" style="width:100%;height:96px;object-fit:cover;border-radius:5px;border:1px solid var(--cream3)"><button class="attach-open" onclick="openDataUrl(this.previousElementSibling.src,true)" style="margin-top:3px;display:block">'+t2('abrir')+'</button></div>':'')
+      +(b.bot?'<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">'+(LANG==='en'?'Whole bottle':'Botella entera')+'</div><img src="'+b.bot+'" style="width:100%;height:140px;object-fit:cover;border-radius:5px;border:1px solid var(--cream3)"><button class="attach-open" onclick="openDataUrl(this.previousElementSibling.src,true)" style="margin-top:3px;display:block">'+t2('abrir')+'</button></div>':'')
+      +(b.bom?'<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">'+(LANG==='en'?'Bottom / mold':'Fondo / molde')+'</div><img src="'+b.bom+'" style="width:100%;height:140px;object-fit:cover;border-radius:5px;border:1px solid var(--cream3)"><button class="attach-open" onclick="openDataUrl(this.previousElementSibling.src,true)" style="margin-top:3px;display:block">'+t2('abrir')+'</button></div>':'')
       +'</div>':'')
     +'<div style="background:var(--cream);border-radius:8px;padding:11px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">'
     +[[t2('fabricante'),b.mak],[t2('codigo'),b.cod],[t2('molde'),b.mol||'—'],[t2('cuno'),b.cuno||'—'],[t2('capacidad'),b.cap||'—'],[t2('bague'),b.fin||'—'],[t2('recepcion'),loc]].map(function(r){return '<div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:2px">'+r[0]+'</div><div style="font-size:12px;font-weight:500">'+r[1]+'</div></div>';}).join('')
@@ -1347,17 +1422,28 @@ function renderA4prev(){
       +'<span>📐 '+TXT.planoTitle[0]+'/'+TXT.planoTitle[1]+' — '+(b.plnN||'plano.pdf')+'</span>'
       +'<button class="attach-open" onclick="openDataUrl(DB.find(function(x){return x.id===\''+b.id+'\';}).pln,false)">'+t2('abrir')+'</button></div>':'')
     +(extras.length?'<div style="font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:7px">'+TXT.archivosAd[0]+' / '+TXT.archivosAd[1]+'</div>'
-      +'<div class="attach-list" style="margin-bottom:12px">'+extras.map(function(f,i){
-        return '<div class="attach-item">'
-          +(f.type==='img'?'<img class="attach-thumb" src="'+f.data+'">'
-            :'<div class="attach-icon">📎</div>')
-          +'<div style="flex:1;min-width:0"><div class="attach-name">'+f.name+'</div></div>'
-          +'<button class="attach-open" onclick="openExtraA4(\''+b.id+'\','+i+')">'+t2('abrir')+'</button>'
-          +'</div>';
-      }).join('')+'</div>':'')
+      +(function(){
+        var imgs=[],others=[];
+        extras.forEach(function(f,i){(f.type==='img'?imgs:others).push({f:f,i:i});});
+        var h='';
+        if(imgs.length){
+          h+='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:10px">'+imgs.map(function(o){
+            return '<div style="position:relative;aspect-ratio:1/1;border-radius:6px;overflow:hidden;border:1px solid var(--cream3);background:var(--cream)">'
+              +'<img src="'+o.f.data+'" style="width:100%;height:100%;object-fit:cover;cursor:pointer" onclick="openExtraA4(\''+b.id+'\','+o.i+')">'
+              +'</div>';
+          }).join('')+'</div>';
+        }
+        if(others.length){
+          h+='<div class="attach-list" style="margin-bottom:12px">'+others.map(function(o){
+            return '<div class="attach-item"><div class="attach-icon">📎</div><div style="flex:1;min-width:0"><div class="attach-name">'+o.f.name+'</div></div><button class="attach-open" onclick="openExtraA4(\''+b.id+'\','+o.i+')">'+t2('abrir')+'</button></div>';
+          }).join('')+'</div>';
+        }
+        return h;
+      })():'')
     +(b.not?'<div style="border-left:3px solid var(--gold);padding:8px 11px;background:var(--cream);border-radius:0 5px 5px 0"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:var(--gold);margin-bottom:3px">'+TXT.notasTitle[0]+' / '+TXT.notasTitle[1]+'</div><div style="font-size:12px;color:var(--ink2)">'+b.not+'</div></div>':'')
     +'</div>'
-    +'<button class="btn btn-primary" onclick="prtA4Small(\''+b.id+'\')" style="margin-top:12px">'+tr('imprimir10x15')+'</button>';
+    +'<button class="btn btn-primary" onclick="prtA4Small(\''+b.id+'\')" style="margin-top:12px">'+tr('imprimir10x15')+'</button>'
+    +'<button class="btn btn-outline" onclick="editFromA4(\''+b.id+'\')" style="margin-top:6px">'+tr('editarRegistro')+'</button>';
 }
 
 function openExtraA4(bid,i){var b=DB.find(function(x){return x.id===bid;});if(!b)return;var f=(b.extras||[])[i];if(f)openDataUrl(f.data,f.type==='img');}
@@ -1377,8 +1463,10 @@ function prtA4Small(id){
     +'*{box-sizing:border-box}'
     +'html,body{margin:0;padding:0;width:100mm;height:150mm;overflow:hidden}'
     +'body{font-family:\'Inter\',Arial,sans-serif}'
-    +'.scale-wrap{width:100mm;height:150mm;overflow:hidden;display:flex;align-items:flex-start;justify-content:center}'
-    +'.a4-prev{transform-origin:top center;padding:14px !important;border:none !important}'
+    +'.scale-wrap{position:relative;width:100mm;height:150mm;overflow:hidden}'
+    +'.a4-prev{position:absolute;top:0;left:0;transform-origin:top left;padding:14px !important;border:none !important;box-sizing:border-box}'
+    +'.a4-prev img{max-width:100%}'
+    +'.photos img,.extbox img,.ext-thumb{max-height:160px !important}'
     +'@media print{*{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;color-adjust:exact !important}}'
     +'</style></head><body>'
     +'<div class="scale-wrap"><div class="a4-prev">'+clone.innerHTML+'</div></div>'
@@ -1389,8 +1477,12 @@ function prtA4Small(id){
     +'var pageW=100*96/25.4;'
     +'var rect=el.getBoundingClientRect();'
     +'var scale=Math.min(pageW/rect.width, pageH/rect.height);'
-    +'el.style.transform="scale("+scale+")";'
     +'el.style.width=rect.width+"px";'
+    +'el.style.transform="scale("+scale+")";'
+    +'var sw=document.querySelector(".scale-wrap");'
+    +'sw.style.width=(rect.width*scale)+"px";'
+    +'sw.style.height=(rect.height*scale)+"px";'
+    +'sw.style.margin="0 auto";'
     +'setTimeout(function(){window.print();setTimeout(function(){window.close();},800);},150);'
     +'};'
     +'<\\/script>'
