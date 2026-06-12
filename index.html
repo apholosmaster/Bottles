@@ -563,18 +563,10 @@ function compressImage(file,cb){
 function openDataUrl(d,isImg){
   if(!d){toast('Archivo no disponible / File not available');return;}
   if(d.indexOf('http')===0){window.open(d,'_blank');return;}
-  try{
-    var parts=d.split(',');
-    var mime=parts[0].match(/:(.*?);/)[1];
-    var bytes=atob(parts[1]);
-    var arr=new Uint8Array(bytes.length);
-    for(var i=0;i<bytes.length;i++) arr[i]=bytes.charCodeAt(i);
-    var blob=new Blob([arr],{type:mime});
-    var url=URL.createObjectURL(blob);
-    window.open(url,'_blank');
-  }catch(e){
-    window.open(d,'_blank');
-  }
+  var a=document.createElement('a');
+  a.href=d;
+  a.target='_blank';
+  a.click();
 }
 
 function setZone(zid,name){var z=document.getElementById(zid);z.innerHTML='<div style="font-size:16px">✓</div><div style="font-weight:500;margin-top:2px">'+name+'</div>';z.classList.add('ok');}
